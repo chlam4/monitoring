@@ -1,4 +1,4 @@
-package data
+package metric
 
 import (
 	"github.com/golang/glog"
@@ -11,7 +11,7 @@ type RepositoryEntity interface {
 	GetId() string
 	GetType() proto.EntityDTO_EntityType
 	GetResourceMetrics() MetricMap
-	GetResourceMetric(resourceType ResourceType, metricType MetricPropType) (*Metric, error)
+	GetResourceMetric(resourceType ResourceType, metricType MetricPropType) (*MetricValue, error)
 }
 
 // Interface for a Repository

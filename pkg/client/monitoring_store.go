@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 	"github.com/golang/glog"
-	"github.com/turbonomic/monitoring/pkg/data"
+	"github.com/chlam4/monitoring/pkg/metric"
 	"github.com/turbonomic/turbo-go-sdk/pkg/proto"
 )
 
@@ -27,17 +27,17 @@ type EntityMonitoringProps struct {
 type PropKey string
 
 var (
-	CPU_CAP       PropKey = NewPropKey(data.CPU, data.CAP)
-	CPU_USED      PropKey = NewPropKey(data.CPU, data.USED)
-	MEM_CAP       PropKey = NewPropKey(data.MEM, data.CAP)
-	MEM_USED      PropKey = NewPropKey(data.MEM, data.USED)
-	CPU_PROV_CAP  PropKey = NewPropKey(data.CPU_PROV, data.CAP)
-	CPU_PROV_USED PropKey = NewPropKey(data.CPU_PROV, data.USED)
-	MEM_PROV_CAP  PropKey = NewPropKey(data.MEM_PROV, data.CAP)
-	MEM_PROV_USED PropKey = NewPropKey(data.MEM_PROV, data.USED)
+	CPU_CAP       PropKey = NewPropKey(metric.CPU, metric.CAP)
+	CPU_USED      PropKey = NewPropKey(metric.CPU, metric.USED)
+	MEM_CAP       PropKey = NewPropKey(metric.MEM, metric.CAP)
+	MEM_USED      PropKey = NewPropKey(metric.MEM, metric.USED)
+	CPU_PROV_CAP  PropKey = NewPropKey(metric.CPU_PROV, metric.CAP)
+	CPU_PROV_USED PropKey = NewPropKey(metric.CPU_PROV, metric.USED)
+	MEM_PROV_CAP  PropKey = NewPropKey(metric.MEM_PROV, metric.CAP)
+	MEM_PROV_USED PropKey = NewPropKey(metric.MEM_PROV, metric.USED)
 )
 
-func NewPropKey(resourceType data.ResourceType, metricType data.MetricPropType) PropKey {
+func NewPropKey(resourceType metric.ResourceType, metricType metric.MetricPropType) PropKey {
 	propKey := PropKey(fmt.Sprintf(string(resourceType) + "-" + string(metricType)))
 	return propKey
 }
@@ -45,9 +45,9 @@ func NewPropKey(resourceType data.ResourceType, metricType data.MetricPropType) 
 // ====================================================================================================================
 // Metadata for the metric to monitored
 type MetricDef struct {
-	entityType   data.EntityType
-	resourceType data.ResourceType
-	metricType   data.MetricPropType
+	entityType   metric.EntityType
+	resourceType metric.ResourceType
+	metricType   metric.MetricPropType
 	metricSetter MetricSetter // Setter for the property
 	// TODO: monitorSpec - spec used to poll for the property
 }
@@ -61,7 +61,7 @@ type MonitoringProperty struct {
 // Object responsible for setting the value for a metric property
 type MetricSetter interface {
 	SetName(name string)
-	SetMetricValue(entity data.RepositoryEntity, value *float64)
+	SetMetricValue(entity metric.RepositoryEntity, value *float64)
 }
 
 // Object that will fetch values for the given monitoring properties for all the entities in the repository
@@ -72,9 +72,9 @@ type Monitor interface {
 }
 
 type MonitorTarget struct {
-	targetId string
-	config   interface{}
-	repository data.Repository
+	targetId        string
+	config          interface{}
+	repository      metric.Repository
 	//rawStatsCache 	*RawStatsCache
 	monitoringProps map[ENTITY_ID]*EntityMonitoringProps
 }
@@ -84,24 +84,24 @@ type MonitorTarget struct {
 // It is configured with a set of Monitors responsible for collecting the data values for the metrics.
 // Applications invoke the GetMetrics() to trigger the data collection.
 type MetricsMetadataStore interface {
-	GetMetricDefs() map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef
+	GetMetricDefs() map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef
 }
 
 // =========================== MetricSetter Implementation ============================================
 
 type DefaultMetricSetter struct {
-	entityType   data.EntityType
-	resourceType data.ResourceType
-	metricType   data.MetricPropType
-	name string
+	entityType   metric.EntityType
+	resourceType metric.ResourceType
+	metricType   metric.MetricPropType
+	name         string
 }
 
-func (setter *DefaultMetricSetter) SetMetricValue(entity data.RepositoryEntity, value *float64) {
+func (setter *DefaultMetricSetter) SetMetricValue(entity metric.RepositoryEntity, value *float64) {
 	//fmt.Printf("Setter : %s %+v\n", &setter, setter)
 	if convertEntityType(setter.entityType) != entity.GetType() {
 		glog.Errorf("Invalid entity type %s, required %s", entity.GetType(), setter.entityType)
 	}
-	var entityMetrics data.MetricMap
+	var entityMetrics metric.MetricMap
 	entityMetrics = entity.GetResourceMetrics()
 	if entityMetrics == nil {
 		glog.Errorf("Nil entity metrics for %s::%s", entity.GetType(), entity.GetId())
@@ -115,28 +115,28 @@ func (setter *DefaultMetricSetter) SetName(name string) {
 }
 // ============================== MetricStore Implementation =========================================
 
-type MetricDefMap map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef
+type MetricDefMap map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef
 
 func NewMetricDefMap() MetricDefMap {
-	return make(map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef)
+	return make(map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
 }
-func (mdm MetricDefMap) Put(et data.EntityType, rt data.ResourceType, mt data.MetricPropType, md *MetricDef) {
+func (mdm MetricDefMap) Put(et metric.EntityType, rt metric.ResourceType, mt metric.MetricPropType, md *MetricDef) {
 	resourceMap, ok := mdm[et]
 	if !ok {
-		mdm[et] = make(map[data.ResourceType]map[data.MetricPropType]*MetricDef)
+		mdm[et] = make(map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
 	}
 	resourceMap = mdm[et]
 
 	metricMap, ok := resourceMap[rt]
 	if !ok {
-		resourceMap[rt] = make(map[data.MetricPropType]*MetricDef)
+		resourceMap[rt] = make(map[metric.MetricPropType]*MetricDef)
 	}
 	metricMap = resourceMap[rt]
 
 	metricMap[mt] = md
 }
 
-func (mdm MetricDefMap) Get(et data.EntityType, rt data.ResourceType, mt data.MetricPropType) *MetricDef {
+func (mdm MetricDefMap) Get(et metric.EntityType, rt metric.ResourceType, mt metric.MetricPropType) *MetricDef {
 	resourceMap, ok := mdm[et]
 	if !ok {
 		return nil
@@ -153,7 +153,7 @@ func (mdm MetricDefMap) Get(et data.EntityType, rt data.ResourceType, mt data.Me
 
 // Implementation for the MetricsStore for Mesos target
 type MesosMetricsMetadataStore struct {
-	metricDefMap map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef
+	metricDefMap map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef
 }
 
 func NewMesosMetricsMetadataStore() *MesosMetricsMetadataStore {
@@ -161,52 +161,52 @@ func NewMesosMetricsMetadataStore() *MesosMetricsMetadataStore {
 
 	// TODO: parse from a file
 	// read from a config file a table of entity type, resource type, metric type to be discovered
-	var mdMap map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef
-	mdMap = make(map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef)
+	var mdMap map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef
+	mdMap = make(map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
 
-	mdMap[data.NODE] = make(map[data.ResourceType]map[data.MetricPropType]*MetricDef)
-	resourceMap := mdMap[data.NODE]
-	addDefaultMetricDef(data.NODE, data.CPU, data.CAP, resourceMap)
-	addDefaultMetricDef(data.NODE, data.MEM, data.CAP, resourceMap)
-	addDefaultMetricDef(data.NODE, data.CPU, data.USED, resourceMap)
-	addDefaultMetricDef(data.NODE, data.MEM, data.USED, resourceMap)
-	addDefaultMetricDef(data.NODE, data.CPU_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.NODE, data.CPU_PROV, data.USED, resourceMap)
-	addDefaultMetricDef(data.NODE, data.MEM_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.NODE, data.MEM_PROV, data.USED, resourceMap)
+	mdMap[metric.NODE] = make(map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
+	resourceMap := mdMap[metric.NODE]
+	addDefaultMetricDef(metric.NODE, metric.CPU, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.MEM, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.CPU, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.MEM, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.CPU_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.CPU_PROV, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.MEM_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.NODE, metric.MEM_PROV, metric.USED, resourceMap)
 
-	mdMap[data.CONTAINER] = make(map[data.ResourceType]map[data.MetricPropType]*MetricDef)
-	resourceMap = mdMap[data.CONTAINER]
-	addDefaultMetricDef(data.CONTAINER, data.CPU, data.CAP, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.CPU, data.USED, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.MEM, data.CAP, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.MEM, data.USED, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.CPU_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.CPU_PROV, data.USED, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.MEM_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.CONTAINER, data.MEM_PROV, data.USED, resourceMap)
+	mdMap[metric.CONTAINER] = make(map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
+	resourceMap = mdMap[metric.CONTAINER]
+	addDefaultMetricDef(metric.CONTAINER, metric.CPU, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.CPU, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.MEM, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.MEM, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.CPU_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.CPU_PROV, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.MEM_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.CONTAINER, metric.MEM_PROV, metric.USED, resourceMap)
 
-	mdMap[data.APP] = make(map[data.ResourceType]map[data.MetricPropType]*MetricDef)
-	resourceMap = mdMap[data.APP]
-	addDefaultMetricDef(data.APP, data.CPU, data.CAP, resourceMap)
-	addDefaultMetricDef(data.APP, data.CPU, data.USED, resourceMap)
-	addDefaultMetricDef(data.APP, data.MEM, data.CAP, resourceMap)
-	addDefaultMetricDef(data.APP, data.MEM, data.USED, resourceMap)
-	addDefaultMetricDef(data.APP, data.CPU_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.APP, data.CPU_PROV, data.USED, resourceMap)
-	addDefaultMetricDef(data.APP, data.MEM_PROV, data.CAP, resourceMap)
-	addDefaultMetricDef(data.APP, data.MEM_PROV, data.USED, resourceMap)
+	mdMap[metric.APP] = make(map[metric.ResourceType]map[metric.MetricPropType]*MetricDef)
+	resourceMap = mdMap[metric.APP]
+	addDefaultMetricDef(metric.APP, metric.CPU, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.CPU, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.MEM, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.MEM, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.CPU_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.CPU_PROV, metric.USED, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.MEM_PROV, metric.CAP, resourceMap)
+	addDefaultMetricDef(metric.APP, metric.MEM_PROV, metric.USED, resourceMap)
 
 	mc.metricDefMap = mdMap
 
 	return mc
 }
 
-func addDefaultMetricDef(entityType data.EntityType, resourceType data.ResourceType, metricType data.MetricPropType,
-	resourceMap map[data.ResourceType]map[data.MetricPropType]*MetricDef) {
+func addDefaultMetricDef(entityType metric.EntityType, resourceType metric.ResourceType, metricType metric.MetricPropType,
+	resourceMap map[metric.ResourceType]map[metric.MetricPropType]*MetricDef) {
 	metricMap, ok := resourceMap[resourceType]
 	if !ok {
-		resourceMap[resourceType] = make(map[data.MetricPropType]*MetricDef)
+		resourceMap[resourceType] = make(map[metric.MetricPropType]*MetricDef)
 	}
 	metricMap = resourceMap[resourceType]
 
@@ -225,11 +225,11 @@ func addDefaultMetricDef(entityType data.EntityType, resourceType data.ResourceT
 	metricMap[metricType] = metricDef
 }
 
-func (metricStore *MesosMetricsMetadataStore) GetMetricDefs() map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef {
+func (metricStore *MesosMetricsMetadataStore) GetMetricDefs() map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef {
 	return metricStore.metricDefMap
 }
 
-func createMonitoringProps(repository data.Repository, mdMap map[data.EntityType]map[data.ResourceType]map[data.MetricPropType]*MetricDef) map[ENTITY_ID]*EntityMonitoringProps {
+func createMonitoringProps(repository metric.Repository, mdMap map[metric.EntityType]map[metric.ResourceType]map[metric.MetricPropType]*MetricDef) map[ENTITY_ID]*EntityMonitoringProps {
 	// Create monitoring property for the repository entities using the MetricDef configured for each entity type
 	var entityPropsMap map[ENTITY_ID]*EntityMonitoringProps
 	entityPropsMap = make(map[ENTITY_ID]*EntityMonitoringProps)
@@ -237,8 +237,7 @@ func createMonitoringProps(repository data.Repository, mdMap map[data.EntityType
 	for entityType, resourceMap := range mdMap {
 		// entity instances
 		entityList := repository.GetEntityInstances(convertEntityType(entityType))
-		for idx, _ := range entityList {
-			entity := entityList[idx]
+		for _, entity := range entityList {
 			entityId := entity.GetId()
 			// monitoring properties of an entity instance
 			entityProps := &EntityMonitoringProps{
@@ -262,12 +261,12 @@ func createMonitoringProps(repository data.Repository, mdMap map[data.EntityType
 	return entityPropsMap
 }
 
-func convertEntityType(entityType data.EntityType) proto.EntityDTO_EntityType {
-	if entityType == data.NODE {
+func convertEntityType(entityType metric.EntityType) proto.EntityDTO_EntityType {
+	if entityType == metric.NODE {
 		return proto.EntityDTO_VIRTUAL_MACHINE
-	} else if entityType == data.APP {
+	} else if entityType == metric.APP {
 		return proto.EntityDTO_APPLICATION
-	} else if entityType == data.CONTAINER {
+	} else if entityType == metric.CONTAINER {
 		return proto.EntityDTO_CONTAINER
 	}
 	return proto.EntityDTO_UNKNOWN
