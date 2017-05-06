@@ -10,9 +10,12 @@ func TestMetricMap(t *testing.T) {
 		value        float64
 	}{
 		{CPU, USED, 10.1},
-		{CPU_PROV, USED, 46.7},
+		{CPU, PEAK, 46.7},
+		{MEM, USED, 62.3},
+		{MEM, AVERAGE, 43.4},
+		{MEM_PROV, CAP, 87.9},
+		{DISK, CAP, 100.0},
 		{CPU_PROV, CAP, 90.5},
-		{MEM, USED, 43.4},
 	}
 
 	metricMap := &MetricMap{}
