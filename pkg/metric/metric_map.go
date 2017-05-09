@@ -8,15 +8,17 @@ import (
 // A MetricMap is a 2-layer map of metric values, indexed by the resource type and the metric property type
 // For example, all metrics of an entity can be stored in such a map.
 type MetricMap map[ResourceType]map[MetricPropType]MetricValue
+// MetricValue is a float64
+type MetricValue float64
 
 // SetResourceMetric sets the metric value in the MetricMap for the given resource type and the metric property type
-func (resourceMetrics MetricMap) SetResourceMetric(resourceType ResourceType, propType MetricPropType, value float64) {
+func (resourceMetrics MetricMap) SetResourceMetric(resourceType ResourceType, propType MetricPropType, value MetricValue) {
 	resourceMap, exists := resourceMetrics[resourceType]
 	if !exists {
 		resourceMap = make(map[MetricPropType]MetricValue)
 		resourceMetrics[resourceType] = resourceMap
 	}
-	resourceMap[propType] = MetricValue(value)
+	resourceMap[propType] = value
 }
 
 // GetResourceMetric retrieves the metric value from the MetricMap for the given resource type and the metric property type
