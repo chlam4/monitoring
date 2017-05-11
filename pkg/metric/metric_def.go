@@ -1,5 +1,10 @@
 package metric
 
+type MetricKey struct {
+	EntityType   EntityType
+	ResourceType ResourceType
+	PropType     MetricPropType
+}
 
 // MetricDef defines a metric to collect and how it is set in the metric repository
 type MetricDef struct {
@@ -7,6 +12,12 @@ type MetricDef struct {
 	resourceType ResourceType
 	propType     MetricPropType
 	metricSetter MetricSetter // Setter for the property
+}
+
+// ToMetricKey returns the corresponding Metric Key for the given MetricDef
+func (metricDef *MetricDef) ToMetricKey() MetricKey {
+	metricKey := MetricKey{EntityType: metricDef.EntityType, ResourceType: metricDef.resourceType, PropType: metricDef.propType}
+	return metricKey
 }
 
 // MakeMetricDef makes a MetricDef with the given entity type, resource type and metric property type, and the
