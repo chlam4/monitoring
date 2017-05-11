@@ -47,9 +47,9 @@ func (repo SimpleMetricRepo) GetEntity(entityType EntityType, id EntityId) Repos
 func (repo SimpleMetricRepo) GetEntityInstances(entityType EntityType) []RepositoryEntity {
 	repoEntityMap, exists := repo[entityType]
 	if !exists {
-		return nil
+		return []RepositoryEntity{}
 	}
-	entities := make([]RepositoryEntity, len(repoEntityMap))
+	entities := []RepositoryEntity{}
 	for _, entity := range repoEntityMap {
 		entities = append(entities, entity)
 	}

@@ -92,4 +92,26 @@ func TestSimpleMetricRepo(t *testing.T) {
 				repoEntity.GetNodeIp(), repo, testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
 		}
 	}
+	//
+	// Check GetEntityInstances result
+	//
+	fakeEntityType := EntityType("fakeEntityType")
+	repoEntities = repo.GetEntityInstances(fakeEntityType)
+	if repoEntities == nil {
+		t.Errorf("GetEntityInstances() for type %v on repo %v should not return nil; " +
+			"an empty list is expected instead", fakeEntityType, repo)
+	}
+	for _, testEntity := range TestEntities {
+		repoEntities = repo.GetEntityInstances(testEntity.entityType)
+		if repoEntities == nil || len(repoEntities) == 0 {
+			t.Errorf("GetEntityInstances() for type %v on repo %v should not be nil or empty.", testEntity.entityType, repo)
+		}
+		for _, repoEntity := range repoEntities {
+			if repoEntity == nil {
+				t.Errorf("GetEntityInstances() for type %v on repo %v should not return nil instances: %v",
+					testEntity.entityType, repo, repoEntities)
+			}
+		}
+	}
+
 }
