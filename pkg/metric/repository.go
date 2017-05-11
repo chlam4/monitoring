@@ -8,13 +8,15 @@ import (
 type Repository interface {
 	GetEntity(entityType EntityType, id EntityId) RepositoryEntity
 	GetEntityInstances(entityType EntityType) []RepositoryEntity
+	SetEntityInstances([]RepositoryEntity)
 }
 
 // RepositoryEntity is an entity in the Repository
-// It contains information such as id, type and all its metrics
+// It contains information such as id, type, node ip and all metrics
 type RepositoryEntity interface {
 	GetId() EntityId
 	GetType() EntityType
+	GetNodeIp() NodeIp
 	GetResourceMetrics() MetricMap
 	GetResourceMetric(resourceType ResourceType, propType MetricPropType) (MetricValue, error)
 	SetMetricValue(resourceType ResourceType, propType MetricPropType, value MetricValue)
@@ -27,7 +29,7 @@ func PrintEntity(entity RepositoryEntity) {
 }
 
 // SimpleMetricRepo is a simple implementation of the metric repository
-type SimpleMetricRepo map[EntityType]map[EntityId]SimpleMetricRepoEntity
+type SimpleMetricRepo map[EntityType]map[EntityId]RepositoryEntity
 
 // NewSimpleMetricRepo returns a new, empty instance of SimpleMetricRepo
 func NewSimpleMetricRepo() Repository {
@@ -54,15 +56,27 @@ func (repo SimpleMetricRepo) GetEntityInstances(entityType EntityType) []Reposit
 	return entities
 }
 
+func (repo SimpleMetricRepo) SetEntityInstances(repoEntities []RepositoryEntity) {
+	for _, repoEntity := range repoEntities {
+		id2EntityMap, exists := repo[repoEntity.GetType()]
+		if !exists {
+			id2EntityMap = make(map[EntityId]RepositoryEntity)
+			repo[repoEntity.GetType()] = id2EntityMap
+		}
+		id2EntityMap[repoEntity.GetId()] = repoEntity
+	}
+}
+
 // SimpleMetricRepoEntity is a simple implementation of the RepositoryEntity
 type SimpleMetricRepoEntity struct {
 	entityType EntityType
 	entityId   EntityId
+	nodeIp     NodeIp
 	metricMap  MetricMap
 }
 
-func NewSimpleMetricRepoEntity(entityType EntityType, entityId EntityId) RepositoryEntity {
-	return SimpleMetricRepoEntity{entityId: entityId, entityType: entityType, metricMap: make(MetricMap)}
+func NewSimpleMetricRepoEntity(entityType EntityType, entityId EntityId, nodeIp NodeIp) RepositoryEntity {
+	return SimpleMetricRepoEntity{entityId: entityId, entityType: entityType, nodeIp: nodeIp, metricMap: make(MetricMap)}
 }
 
 // GetId returns the id of the entity
@@ -73,6 +87,11 @@ func (repoEntity SimpleMetricRepoEntity) GetId() EntityId {
 // GetType returns the type of the entity
 func (repoEntity SimpleMetricRepoEntity) GetType() EntityType {
 	return repoEntity.entityType
+}
+
+// GetNodeIp returns the type of the entity
+func (repoEntity SimpleMetricRepoEntity) GetNodeIp() NodeIp {
+	return repoEntity.nodeIp
 }
 
 // GetResourceMetrics returns the map of metrics for the given repository entity
