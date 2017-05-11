@@ -2,7 +2,7 @@ package metric
 
 import "testing"
 
-var TestSet = []struct {
+var TestEntities = []struct {
 	entityType EntityType
 	entityId   EntityId
 	nodeIp     NodeIp
@@ -15,19 +15,19 @@ var TestSet = []struct {
 
 func TestSimpleMetricRepoEntity_GetId_GetType(t *testing.T) {
 
-	for _, test := range TestSet {
-		repoEntity := NewSimpleMetricRepoEntity(test.entityType, test.entityId, test.nodeIp)
-		if repoEntity.GetType() != test.entityType {
+	for _, testEntity := range TestEntities {
+		repoEntity := NewSimpleMetricRepoEntity(testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
+		if repoEntity.GetType() != testEntity.entityType {
 			t.Errorf("Retrieved type %v from repo entity %v is not the same as input %v",
-				repoEntity.GetType(), repoEntity, test.entityType)
+				repoEntity.GetType(), repoEntity, testEntity.entityType)
 		}
-		if repoEntity.GetId() != test.entityId {
+		if repoEntity.GetId() != testEntity.entityId {
 			t.Errorf("Retrieved id %v from repo entity %v is not the same as input %v",
-				repoEntity.GetId(), repoEntity, test.entityId)
+				repoEntity.GetId(), repoEntity, testEntity.entityId)
 		}
-		if repoEntity.GetNodeIp() != test.nodeIp {
+		if repoEntity.GetNodeIp() != testEntity.nodeIp {
 			t.Errorf("Retrieved node ip %v from repo entity %v is not the same as input %v",
-				repoEntity.GetNodeIp(), repoEntity, test.nodeIp)
+				repoEntity.GetNodeIp(), repoEntity, testEntity.nodeIp)
 		}
 	}
 }
@@ -36,7 +36,7 @@ func TestSimpleMetricRepoEntity_GetSetMetricValue(t *testing.T) {
 	//
 	// Pick one set of test data to construct a repo entity
 	//
-	test0 := TestSet[0]
+	test0 := TestEntities[0]
 	repoEntity := NewSimpleMetricRepoEntity(test0.entityType, test0.entityId, test0.nodeIp)
 	//
 	// Add all test metrics into the repository entity
@@ -65,8 +65,8 @@ func TestSimpleMetricRepo(t *testing.T) {
 	// Construct a list of repo entities based on the test data
 	//
 	repoEntities := []RepositoryEntity{}
-	for _, test := range TestSet {
-		repoEntity := NewSimpleMetricRepoEntity(test.entityType, test.entityId, test.nodeIp)
+	for _, testEntity := range TestEntities {
+		repoEntity := NewSimpleMetricRepoEntity(testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
 		repoEntities = append(repoEntities, repoEntity)
 	}
 	//
@@ -77,19 +77,19 @@ func TestSimpleMetricRepo(t *testing.T) {
 	//
 	// Check GetEntity result
 	//
-	for _, test := range TestSet {
-		repoEntity := repo.GetEntity(test.entityType, test.entityId)
+	for _, testEntity := range TestEntities {
+		repoEntity := repo.GetEntity(testEntity.entityType, testEntity.entityId)
 		if repoEntity == nil {
-			t.Errorf("No repo entity for type %v and id %v found in repo %v", test.entityType, test.entityId, repo)
-		} else if repoEntity.GetType() != test.entityType {
+			t.Errorf("No repo entity for type %v and id %v found in repo %v", testEntity.entityType, testEntity.entityId, repo)
+		} else if repoEntity.GetType() != testEntity.entityType {
 			t.Errorf("Retrieved type %v from repo %v for entity type %v and id %v is not the same as entered %v",
-				repoEntity.GetType(), repo, test.entityType, test.entityId, test.entityType)
-		} else if repoEntity.GetId() != test.entityId {
+				repoEntity.GetType(), repo, testEntity.entityType, testEntity.entityId, testEntity.entityType)
+		} else if repoEntity.GetId() != testEntity.entityId {
 			t.Errorf("Retrieved id %v from repo %v for entity type %v and id %v is not the same as entered %v",
-				repoEntity.GetId(), repo, test.entityType, test.entityId, test.entityId)
-		} else if repoEntity.GetNodeIp() != test.nodeIp {
+				repoEntity.GetId(), repo, testEntity.entityType, testEntity.entityId, testEntity.entityId)
+		} else if repoEntity.GetNodeIp() != testEntity.nodeIp {
 			t.Errorf("Retrieved node ip %v from repo %v for entity type %v and id %v is not the same as entered %v",
-				repoEntity.GetNodeIp(), repo, test.entityType, test.entityId, test.nodeIp)
+				repoEntity.GetNodeIp(), repo, testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
 		}
 	}
 }
