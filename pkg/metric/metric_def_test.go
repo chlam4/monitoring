@@ -34,3 +34,12 @@ func TestMakeMetricDefWithDefaultSetter(t *testing.T) {
 		}
 	}
 }
+
+func MakeTestMetricDefs() []MetricDef {
+	metricDefs := []MetricDef{}
+	for _, testDef := range TestDefs {
+		metricDef := MakeMetricDefWithDefaultSetter(testDef.entityType, testDef.resourceType, testDef.propType)
+		metricDefs = append(metricDefs, metricDef)
+	}
+	return metricDefs
+}

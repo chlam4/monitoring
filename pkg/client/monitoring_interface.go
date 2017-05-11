@@ -16,24 +16,13 @@ type Monitor interface {
 type MonitorTarget struct {
 	targetId        string
 	config          interface{}
-	repository      metric.Repository // metric repository to store the metric values
-	monitoringProps MonitoringProps   // meta data that defines what metrics to collect for what entities
+	Repository      metric.Repository // metric repository to store the metric values
+	MonitoringProps metric.MonitoringProps   // meta data that defines what metrics to collect for what entities
 }
 
-// MonitoringProps defines a set of metrics targeted to monitor for each entity
-type MonitoringProps map[metric.EntityId][]metric.MetricDef
+// MakeMonitorTarget creates a monitor target given a repository and the metric defs
+func MakeMonitorTarget(repo metric.Repository, metricDefs []metric.MetricDef) MonitorTarget {
 
-// CreateMonitoringProps creates monitoring property for the repository entities using the MetricDef of each entity type
-func CreateMonitoringProps(repo metric.Repository, metricDefs []metric.MetricDef) *MonitoringProps {
-
-	monitoringProps := make(MonitoringProps)
-
-	for _, metricDef := range metricDefs {
-		entities := repo.GetEntityInstances(metricDef.EntityType)
-		for _, entity := range entities {
-			entityId := metric.EntityId(entity.GetId())
-			monitoringProps[entityId] = append(monitoringProps[entityId], metricDef)
-		}
-	}
-	return monitoringProps
+	monitoringProps := metric.MakeMonitoringProps(repo, metricDefs)
+	return MonitorTarget{Repository: repo, MonitoringProps: monitoringProps}
 }

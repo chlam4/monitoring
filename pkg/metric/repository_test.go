@@ -115,3 +115,21 @@ func TestSimpleMetricRepo(t *testing.T) {
 	}
 
 }
+
+func MakeTestRepo() Repository {
+	//
+	// Construct a list of repo entities based on the test data
+	//
+	repoEntities := []RepositoryEntity{}
+	for _, testEntity := range TestEntities {
+		repoEntity := NewSimpleMetricRepoEntity(testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
+		repoEntities = append(repoEntities, repoEntity)
+	}
+	//
+	// Construct a repo and add those repo entities to the repo
+	//
+	repo := NewSimpleMetricRepo()
+	repo.SetEntityInstances(repoEntities)
+
+	return repo
+}
