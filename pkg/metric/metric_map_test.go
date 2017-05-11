@@ -2,33 +2,33 @@ package metric
 
 import "testing"
 
-func TestMetricMap(t *testing.T) {
+var TestMetrics = []struct {
+	resourceType ResourceType
+	propType     MetricPropType
+	value        float64
+}{
+	{CPU, USED, 10.1},
+	{CPU, PEAK, 46.7},
+	{MEM, USED, 62.3},
+	{MEM, AVERAGE, 43.4},
+	{MEM_PROV, CAP, 87.9},
+	{DISK, CAP, 100.0},
+	{CPU_PROV, CAP, 90.5},
+}
 
-	testMetrics := []struct {
-		resourceType ResourceType
-		propType     MetricPropType
-		value        float64
-	}{
-		{CPU, USED, 10.1},
-		{CPU, PEAK, 46.7},
-		{MEM, USED, 62.3},
-		{MEM, AVERAGE, 43.4},
-		{MEM_PROV, CAP, 87.9},
-		{DISK, CAP, 100.0},
-		{CPU_PROV, CAP, 90.5},
-	}
+func TestMetricMap(t *testing.T) {
 
 	metricMap := &MetricMap{}
 
 	// Add all test metrics into the metric map
 	//
-	for _, metric := range testMetrics {
+	for _, metric := range TestMetrics {
 		metricMap.SetResourceMetric(metric.resourceType, metric.propType, MetricValue(metric.value))
 	}
 	//
 	// Retrieve the value for each metric and confirm it's the same as entered
 	//
-	for _, metric := range testMetrics {
+	for _, metric := range TestMetrics {
 		value, err := metricMap.GetResourceMetric(metric.resourceType, metric.propType)
 		if err != nil {
 			t.Errorf("Error while retrieving metric (%v, %v) from map %v: %s",

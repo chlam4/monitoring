@@ -56,8 +56,8 @@ func (repo SimpleMetricRepo) GetEntityInstances(entityType EntityType) []Reposit
 
 // SimpleMetricRepoEntity is a simple implementation of the RepositoryEntity
 type SimpleMetricRepoEntity struct {
-	entityId   EntityId
 	entityType EntityType
+	entityId   EntityId
 	metricMap  MetricMap
 }
 
