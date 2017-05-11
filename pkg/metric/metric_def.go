@@ -13,5 +13,5 @@ type MetricDef struct {
 // default metric setter.
 func MakeMetricDefWithDefaultSetter(entityType EntityType, resourceType ResourceType, propType MetricPropType) MetricDef {
 	setter := DefaultMetricSetter{entityType: entityType, resourceType: resourceType, propType: propType}
-	return MetricDef{EntityType: entityType, resourceType: resourceType, propType: propType, metricSetter: &setter}
+	return MetricDef{EntityType: entityType, resourceType: resourceType, propType: propType, metricSetter: setter}
 }

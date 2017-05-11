@@ -75,7 +75,7 @@ func TestSimpleMetricRepo(t *testing.T) {
 	repo := NewSimpleMetricRepo()
 	repo.SetEntityInstances(repoEntities)
 	//
-	// Check the GetEntity result
+	// Check GetEntity result
 	//
 	for _, test := range TestSet {
 		repoEntity := repo.GetEntity(test.entityType, test.entityId)

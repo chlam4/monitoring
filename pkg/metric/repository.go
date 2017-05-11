@@ -25,7 +25,7 @@ type RepositoryEntity interface {
 func PrintEntity(entity RepositoryEntity) {
 	glog.Infof("Entity %s::%s\n", entity.GetType(), entity.GetId())
 	resourceMetrics := entity.GetResourceMetrics()
-	resourceMetrics.printMetrics()
+	resourceMetrics.PrintMetrics()
 }
 
 // SimpleMetricRepo is a simple implementation of the metric repository

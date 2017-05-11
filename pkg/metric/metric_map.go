@@ -37,7 +37,7 @@ func (resourceMetrics MetricMap) GetResourceMetric(resourceType ResourceType, me
 }
 
 // printMetrics prints out all metrics to the log
-func (resourceMetrics MetricMap) printMetrics() {
+func (resourceMetrics MetricMap) PrintMetrics() {
 	for resourceType, resourceMap := range resourceMetrics {
 		for prop, value := range resourceMap {
 			glog.Infof("\t\t%s::%s : %f\n", resourceType, prop, value)
