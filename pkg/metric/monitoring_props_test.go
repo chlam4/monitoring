@@ -2,14 +2,14 @@ package metric
 
 import (
 	"testing"
-	"fmt"
+	"github.com/davecgh/go-spew/spew"
 )
 
 func TestMonitoringProps(t *testing.T) {
 	repo := MakeTestRepo()
 	metricDefs := MakeTestMetricDefs()
 	mProps := MakeMonitoringProps(repo, metricDefs)
-	fmt.Println(mProps)
-	byMetricDef := mProps.ByMetricDef()
-	fmt.Println(byMetricDef)
+	spew.Dump(mProps)
+	byMetricDef := mProps.ByMetricDef(repo)
+	spew.Dump(byMetricDef)
 }

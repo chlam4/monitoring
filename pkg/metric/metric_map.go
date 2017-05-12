@@ -3,6 +3,7 @@ package metric
 import (
 	"fmt"
 	"github.com/golang/glog"
+	"bytes"
 )
 
 // A MetricMap is a 2-layer map of metric values, indexed by the resource type and the metric property type
@@ -36,11 +37,13 @@ func (resourceMetrics MetricMap) GetResourceMetric(resourceType ResourceType, me
 	return value, nil
 }
 
-// printMetrics prints out all metrics to the log
-func (resourceMetrics MetricMap) PrintMetrics() {
+func (resourceMetrics MetricMap) String() string {
+	var buffer bytes.Buffer
 	for resourceType, resourceMap := range resourceMetrics {
 		for prop, value := range resourceMap {
-			glog.Infof("\t\t%s::%s : %f\n", resourceType, prop, value)
+			line := fmt.Sprintf("\t\t%s::%s : %f\n", resourceType, prop, value)
+			buffer.WriteString(line)
 		}
 	}
+	return buffer.String()
 }

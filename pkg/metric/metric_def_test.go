@@ -22,10 +22,10 @@ func TestMakeMetricDefWithDefaultSetter(t *testing.T) {
 		if metricDef.EntityType != testDef.entityType {
 			t.Errorf("Entity type in the metric def %v does not match with input %v", metricDef, testDef.entityType)
 		}
-		if metricDef.resourceType != testDef.resourceType {
+		if metricDef.ResourceType != testDef.resourceType {
 			t.Errorf("Resource type in the metric def %v does not match with input %v", metricDef, testDef.resourceType)
 		}
-		if metricDef.propType != testDef.propType {
+		if metricDef.PropType != testDef.propType {
 			t.Errorf("Property type in the metric def %v does not match with input %v", metricDef, testDef.propType)
 		}
 		_, ok := metricDef.metricSetter.(DefaultMetricSetter)

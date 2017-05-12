@@ -42,7 +42,8 @@ func TestSimpleMetricRepoEntity_GetSetMetricValue(t *testing.T) {
 	// Add all test metrics into the repository entity
 	//
 	for _, metric := range TestMetrics {
-		repoEntity.SetMetricValue(metric.resourceType, metric.propType, MetricValue(metric.value))
+		metridDef := MakeMetricDefWithDefaultSetter(repoEntity.GetType(), metric.resourceType, metric.propType)
+		repoEntity.SetMetricValue(metridDef, MetricValue(metric.value))
 	}
 	//
 	// Retrieve the value for each metric and confirm it's the same as entered

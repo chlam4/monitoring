@@ -4,7 +4,7 @@ package metric
 // MonitoringProps defines a set of metrics targeted to monitor for each entity
 type MonitoringProps map[EntityId][]MetricDef
 
-// MakeMonitorTarget creates a monitor target given a repository and the metric defs
+// MakeMonitoringProps creates a set of monitoring properties given a repository and the metric defs
 func MakeMonitoringProps(repo Repository, metricDefs []MetricDef) MonitoringProps {
 
 	monitoringProps := make(MonitoringProps)
@@ -19,17 +19,18 @@ func MakeMonitoringProps(repo Repository, metricDefs []MetricDef) MonitoringProp
 	return monitoringProps
 }
 
-// ByMetricDef rearranges MonitoringProps by MetricDef
-func (byEntityId MonitoringProps) ByMetricDef() map[MetricDef][]EntityId {
-	byMetricDef := map[MetricDef][]EntityId{}
+// ByMetricDef rearranges MonitoringProps by MetricDef, with value being a map of NodeIp to EntityId
+func (byEntityId MonitoringProps) ByMetricDef(repo Repository) map[MetricDef]map[NodeIp]EntityId {
+	byMetricDef := map[MetricDef]map[NodeIp]EntityId{}
 	for entityId, metricDefs := range byEntityId {
 		for _, metricDef := range metricDefs {
-			ids, exists := byMetricDef[metricDef]
+			ip2IdMap, exists := byMetricDef[metricDef]
 			if !exists {
-				ids = []EntityId{}
+				ip2IdMap = map[NodeIp]EntityId{}
 			}
-			ids = append(ids, entityId)
-			byMetricDef[metricDef] = ids
+			repoEntity := repo.GetEntity(metricDef.EntityType, entityId)
+			ip2IdMap[repoEntity.GetNodeIp()] = entityId
+			byMetricDef[metricDef] = ip2IdMap
 		}
 	}
 	return byMetricDef

@@ -16,8 +16,8 @@ type Monitor interface {
 type MonitorTarget struct {
 	targetId        string
 	config          interface{}
-	Repository      metric.Repository // metric repository to store the metric values
-	MonitoringProps metric.MonitoringProps   // meta data that defines what metrics to collect for what entities
+	Repository      metric.Repository      // metric repository to store the metric values
+	MonitoringProps metric.MonitoringProps // meta data that defines what metrics to collect for what entities
 }
 
 // MakeMonitorTarget creates a monitor target given a repository and the metric defs

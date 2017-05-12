@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestPrometheusMonitor_Monitor(t *testing.T) {
+func TestPrometheusMonitor(t *testing.T) {
 	//
 	// What metrics do you want Prometheus to collect?
 	//
@@ -26,15 +26,19 @@ func TestPrometheusMonitor_Monitor(t *testing.T) {
 	// Construct the monitor target
 	//
 	monitorTarget := client.MakeMonitorTarget(repo, metricDefs)
-
-	promeServerUrl := "http://localhost:9090"
+	//
+	// Call Prometheus to collect metrics
+	//
+	promeServerUrl := "http://192.168.99.100:30900"
 	promMonitor, err := NewPrometheusMonitor(promeServerUrl)
 	if err != nil {
 		t.Errorf("Error instantiating a Prometheus Monitor instance: %s", err)
 	}
 	promMonitor.Monitor(&monitorTarget)
-	for _, repoEntity := range repoEntities {
-		t.Logf("Metrics collected for (%v, %v) are as follows:\n", repoEntity.GetType(), repoEntity.GetId())
-		repoEntity.GetResourceMetrics().PrintMetrics()
+	//
+	// Process the collected metrics
+	//
+	for _, repoEntity := range repo.GetEntityInstances(metric.NODE) {
+		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s", repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetResourceMetrics())
 	}
 }

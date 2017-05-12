@@ -9,6 +9,7 @@ type Repository interface {
 	GetEntity(entityType EntityType, id EntityId) RepositoryEntity
 	GetEntityInstances(entityType EntityType) []RepositoryEntity
 	SetEntityInstances([]RepositoryEntity)
+	SetMetricValue(entityId EntityId, metricDef MetricDef, value MetricValue)
 }
 
 // RepositoryEntity is an entity in the Repository
@@ -19,13 +20,11 @@ type RepositoryEntity interface {
 	GetNodeIp() NodeIp
 	GetResourceMetrics() MetricMap
 	GetResourceMetric(resourceType ResourceType, propType MetricPropType) (MetricValue, error)
-	SetMetricValue(resourceType ResourceType, propType MetricPropType, value MetricValue)
+	SetMetricValue(metricDef MetricDef, value MetricValue)
 }
 
 func PrintEntity(entity RepositoryEntity) {
-	glog.Infof("Entity %s::%s\n", entity.GetType(), entity.GetId())
-	resourceMetrics := entity.GetResourceMetrics()
-	resourceMetrics.PrintMetrics()
+	glog.Infof("Entity %s::%s\n%s", entity.GetType(), entity.GetId(), entity.GetResourceMetrics())
 }
 
 // SimpleMetricRepo is a simple implementation of the metric repository
@@ -67,6 +66,11 @@ func (repo SimpleMetricRepo) SetEntityInstances(repoEntities []RepositoryEntity)
 	}
 }
 
+func (repo SimpleMetricRepo) SetMetricValue(entityId EntityId, metricDef MetricDef, value MetricValue) {
+	repoEntity := repo.GetEntity(metricDef.EntityType, entityId)
+	repoEntity.SetMetricValue(metricDef, value)
+}
+
 // SimpleMetricRepoEntity is a simple implementation of the RepositoryEntity
 type SimpleMetricRepoEntity struct {
 	entityType EntityType
@@ -104,6 +108,6 @@ func (repoEntity SimpleMetricRepoEntity) GetResourceMetric(resourceType Resource
 	return repoEntity.metricMap.GetResourceMetric(resourceType, propType)
 }
 
-func (repoEntity SimpleMetricRepoEntity) SetMetricValue(resourceType ResourceType, propType MetricPropType, value MetricValue) {
-	repoEntity.metricMap.SetResourceMetric(resourceType, propType, value)
+func (repoEntity SimpleMetricRepoEntity) SetMetricValue(metricDef MetricDef, value MetricValue) {
+	metricDef.metricSetter.SetMetricValue(repoEntity, value)
 }
