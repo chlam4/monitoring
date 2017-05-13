@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	"github.com/chlam4/monitoring/pkg/metric"
 	"github.com/chlam4/monitoring/pkg/client"
+	"github.com/chlam4/monitoring/pkg/metric"
 	"testing"
 )
 
@@ -11,14 +11,19 @@ func TestPrometheusMonitor(t *testing.T) {
 	// What metrics do you want Prometheus to collect?
 	//
 	metricDefs := []metric.MetricDef{
+		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.CPU, metric.USED),
 		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.USED),
+		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.CAP),
+		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.AVERAGE),
+		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.PEAK),
+		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.NETWORK, metric.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?
 	//
 	repoEntities := []metric.RepositoryEntity{
 		metric.NewSimpleMetricRepoEntity(metric.NODE, "abc", "192.168.99.100"),
-		metric.NewSimpleMetricRepoEntity(metric.NODE, "xyz", "localhost"),
+		metric.NewSimpleMetricRepoEntity(metric.NODE, "xyz", "10.10.172.235"),
 	}
 	repo := metric.NewSimpleMetricRepo()
 	repo.SetEntityInstances(repoEntities)

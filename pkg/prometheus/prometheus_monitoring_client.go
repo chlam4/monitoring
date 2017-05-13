@@ -54,6 +54,7 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 		value, err := monitor.PrometheusApi.Query(context.Background(), string(query), time.Now())
 		if err != nil {
 			glog.Errorf("Error querying Prometheus with query %v: %s", query, err)
+			continue
 		}
 		switch value.Type() {
 		case model.ValVector:

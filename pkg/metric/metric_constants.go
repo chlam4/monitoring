@@ -19,6 +19,7 @@ const (
 	DISK     ResourceType = "DISK"
 	MEM_PROV ResourceType = "MEM_PROV"
 	CPU_PROV ResourceType = "CPU_PROV"
+	NETWORK  ResourceType = "NETWORK"
 )
 
 const (
