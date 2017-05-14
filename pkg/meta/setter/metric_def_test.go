@@ -1,19 +1,25 @@
-package metric
+package setter
 
-import "testing"
+import (
+	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/chlam4/monitoring/pkg/model/entity"
+	"github.com/chlam4/monitoring/pkg/model/property"
+	"github.com/chlam4/monitoring/pkg/model/resource"
+	"testing"
+)
 
 var TestDefs = []struct {
-	entityType   EntityType
-	resourceType ResourceType
-	propType     MetricPropType
+	entityType   model.EntityType
+	resourceType model.ResourceType
+	propType     model.MetricPropType
 }{
-	{NODE, CPU, USED},
-	{CONTAINER, CPU, PEAK},
-	{APP, MEM, USED},
-	{NODE, MEM, AVERAGE},
-	{NODE, MEM_PROV, CAP},
-	{NODE, DISK, CAP},
-	{APP, CPU_PROV, CAP},
+	{entity.NODE, resource.CPU, property.USED},
+	{entity.CONTAINER, resource.CPU, property.PEAK},
+	{entity.APP, resource.MEM, property.USED},
+	{entity.NODE, resource.MEM, property.AVERAGE},
+	{entity.NODE, resource.MEM_PROV, property.CAP},
+	{entity.NODE, resource.DISK, property.CAP},
+	{entity.APP, resource.CPU_PROV, property.CAP},
 }
 
 func TestMakeMetricDefWithDefaultSetter(t *testing.T) {
@@ -28,18 +34,9 @@ func TestMakeMetricDefWithDefaultSetter(t *testing.T) {
 		if metricDef.PropType != testDef.propType {
 			t.Errorf("Property type in the metric def %v does not match with input %v", metricDef, testDef.propType)
 		}
-		_, ok := metricDef.metricSetter.(DefaultMetricSetter)
+		_, ok := metricDef.MetricSetter.(DefaultMetricSetter)
 		if !ok {
 			t.Errorf("Setter in metric def %v is not the default metric setter", metricDef)
 		}
 	}
-}
-
-func MakeTestMetricDefs() []MetricDef {
-	metricDefs := []MetricDef{}
-	for _, testDef := range TestDefs {
-		metricDef := MakeMetricDefWithDefaultSetter(testDef.entityType, testDef.resourceType, testDef.propType)
-		metricDefs = append(metricDefs, metricDef)
-	}
-	return metricDefs
 }

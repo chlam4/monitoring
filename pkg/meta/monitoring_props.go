@@ -1,18 +1,24 @@
-package metric
+package meta
+
+import (
+	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/chlam4/monitoring/pkg/meta/setter"
+	"github.com/chlam4/monitoring/pkg/repository"
+)
 
 
 // MonitoringProps defines a set of metrics targeted to monitor for each entity
-type MonitoringProps map[EntityId][]MetricDef
+type MonitoringProps map[model.EntityId][]setter.MetricDef
 
 // MakeMonitoringProps creates a set of monitoring properties given a repository and the metric defs
-func MakeMonitoringProps(repo Repository, metricDefs []MetricDef) MonitoringProps {
+func MakeMonitoringProps(repo repository.Repository, metricDefs []setter.MetricDef) MonitoringProps {
 
-	monitoringProps := make(MonitoringProps)
+	monitoringProps := MonitoringProps{}
 
 	for _, metricDef := range metricDefs {
 		entities := repo.GetEntityInstances(metricDef.EntityType)
 		for _, entity := range entities {
-			entityId := EntityId(entity.GetId())
+			entityId := model.EntityId(entity.GetId())
 			monitoringProps[entityId] = append(monitoringProps[entityId], metricDef)
 		}
 	}
@@ -20,15 +26,15 @@ func MakeMonitoringProps(repo Repository, metricDefs []MetricDef) MonitoringProp
 }
 
 // ByMetricDef rearranges MonitoringProps by MetricDef, with value being a map of NodeIp to EntityId
-func (byEntityId MonitoringProps) ByMetricDef(repo Repository) map[MetricDef]map[NodeIp]EntityId {
-	byMetricDef := map[MetricDef]map[NodeIp]EntityId{}
+func (byEntityId MonitoringProps) ByMetricDef(repo repository.Repository) map[setter.MetricDef]map[model.NodeIp]model.EntityId {
+	byMetricDef := map[setter.MetricDef]map[model.NodeIp]model.EntityId{}
 	for entityId, metricDefs := range byEntityId {
 		for _, metricDef := range metricDefs {
 			ip2IdMap, exists := byMetricDef[metricDef]
 			if !exists {
-				ip2IdMap = map[NodeIp]EntityId{}
+				ip2IdMap = map[model.NodeIp]model.EntityId{}
 			}
-			repoEntity := repo.GetEntity(metricDef.EntityType, entityId)
+			repoEntity := repo.GetEntity(entityId)
 			ip2IdMap[repoEntity.GetNodeIp()] = entityId
 			byMetricDef[metricDef] = ip2IdMap
 		}

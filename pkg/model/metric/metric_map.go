@@ -1,45 +1,51 @@
 package metric
 
 import (
-	"fmt"
-	"github.com/golang/glog"
 	"bytes"
+	"fmt"
+	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/golang/glog"
 )
 
 // A MetricMap is a 2-layer map of metric values, indexed by the resource type and the metric property type
 // For example, all metrics of an entity can be stored in such a map.
-type MetricMap map[ResourceType]map[MetricPropType]MetricValue
-// MetricValue is a float64
-type MetricValue float64
+type MetricMap map[model.ResourceType]map[model.MetricPropType]MetricValue
 
 // SetResourceMetric sets the metric value in the MetricMap for the given resource type and the metric property type
-func (resourceMetrics MetricMap) SetResourceMetric(resourceType ResourceType, propType MetricPropType, value MetricValue) {
-	resourceMap, exists := resourceMetrics[resourceType]
+func (metricMap MetricMap) SetMetricValue(
+	resourceType model.ResourceType,
+	propType model.MetricPropType,
+	value MetricValue,
+) {
+	resourceMap, exists := metricMap[resourceType]
 	if !exists {
-		resourceMap = make(map[MetricPropType]MetricValue)
-		resourceMetrics[resourceType] = resourceMap
+		resourceMap = make(map[model.MetricPropType]MetricValue)
+		metricMap[resourceType] = resourceMap
 	}
 	resourceMap[propType] = value
 }
 
 // GetResourceMetric retrieves the metric value from the MetricMap for the given resource type and the metric property type
-func (resourceMetrics MetricMap) GetResourceMetric(resourceType ResourceType, metricType MetricPropType) (MetricValue, error) {
-	resourceMap, exists := resourceMetrics[resourceType]
+func (metricMap MetricMap) GetMetricValue(
+	resourceType model.ResourceType,
+	propType model.MetricPropType,
+) (MetricValue, error) {
+	resourceMap, exists := metricMap[resourceType]
 	if !exists {
 		glog.V(4).Infof("Cannot find metrics for resource %s\n", resourceType)
 		return MetricValue(0), fmt.Errorf("missing metrics for resource %s", resourceType)
 	}
-	value, exists := resourceMap[metricType]
+	value, exists := resourceMap[propType]
 	if !exists {
-		glog.V(4).Infof("Cannot find metrics for type %s\n", metricType)
-		return MetricValue(0), fmt.Errorf("missing metrics for type %s:%s", resourceType, metricType)
+		glog.V(4).Infof("Cannot find metrics for type %s\n", propType)
+		return MetricValue(0), fmt.Errorf("missing metrics for type %s:%s", resourceType, propType)
 	}
 	return value, nil
 }
 
-func (resourceMetrics MetricMap) String() string {
+func (metricMap MetricMap) String() string {
 	var buffer bytes.Buffer
-	for resourceType, resourceMap := range resourceMetrics {
+	for resourceType, resourceMap := range metricMap {
 		for prop, value := range resourceMap {
 			line := fmt.Sprintf("\t\t%s::%s : %f\n", resourceType, prop, value)
 			buffer.WriteString(line)

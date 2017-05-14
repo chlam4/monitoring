@@ -1,7 +1,9 @@
 package client
 
 import (
-	"github.com/chlam4/monitoring/pkg/metric"
+	"github.com/chlam4/monitoring/pkg/meta"
+	"github.com/chlam4/monitoring/pkg/meta/setter"
+	"github.com/chlam4/monitoring/pkg/repository"
 )
 
 // Monitor defines the monitoring interface
@@ -16,13 +18,13 @@ type Monitor interface {
 type MonitorTarget struct {
 	targetId        string
 	config          interface{}
-	Repository      metric.Repository      // metric repository to store the metric values
-	MonitoringProps metric.MonitoringProps // meta data that defines what metrics to collect for what entities
+	Repository      repository.Repository // metric repository to store the metric values
+	MonitoringProps meta.MonitoringProps  // meta data that defines what metrics to collect for what entities
 }
 
 // MakeMonitorTarget creates a monitor target given a repository and the metric defs
-func MakeMonitorTarget(repo metric.Repository, metricDefs []metric.MetricDef) MonitorTarget {
+func MakeMonitorTarget(repo repository.Repository, metricDefs []setter.MetricDef) MonitorTarget {
 
-	monitoringProps := metric.MakeMonitoringProps(repo, metricDefs)
+	monitoringProps := meta.MakeMonitoringProps(repo, metricDefs)
 	return MonitorTarget{Repository: repo, MonitoringProps: monitoringProps}
 }

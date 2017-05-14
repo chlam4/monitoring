@@ -2,7 +2,12 @@ package prometheus
 
 import (
 	"github.com/chlam4/monitoring/pkg/client"
-	"github.com/chlam4/monitoring/pkg/metric"
+	"github.com/chlam4/monitoring/pkg/meta/setter"
+	"github.com/chlam4/monitoring/pkg/model/entity"
+	"github.com/chlam4/monitoring/pkg/model/property"
+	"github.com/chlam4/monitoring/pkg/model/resource"
+	"github.com/chlam4/monitoring/pkg/repository"
+	"github.com/chlam4/monitoring/pkg/repository/simpleRepo"
 	"testing"
 )
 
@@ -10,22 +15,22 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// What metrics do you want Prometheus to collect?
 	//
-	metricDefs := []metric.MetricDef{
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.CPU, metric.USED),
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.USED),
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.CAP),
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.AVERAGE),
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.MEM, metric.PEAK),
-		metric.MakeMetricDefWithDefaultSetter(metric.NODE, metric.NETWORK, metric.USED),
+	metricDefs := []setter.MetricDef{
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
+		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?
 	//
-	repoEntities := []metric.RepositoryEntity{
-		metric.NewSimpleMetricRepoEntity(metric.NODE, "abc", "192.168.99.100"),
-		metric.NewSimpleMetricRepoEntity(metric.NODE, "xyz", "10.10.172.235"),
+	repoEntities := []repository.RepositoryEntity{
+		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "abc", "192.168.99.100"),
+		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "xyz", "10.10.172.235"),
 	}
-	repo := metric.NewSimpleMetricRepo()
+	repo := simpleRepo.NewSimpleMetricRepo()
 	repo.SetEntityInstances(repoEntities)
 	//
 	// Construct the monitor target
@@ -43,7 +48,7 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// Process the collected metrics
 	//
-	for _, repoEntity := range repo.GetEntityInstances(metric.NODE) {
-		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s", repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetResourceMetrics())
+	for _, repoEntity := range repo.GetEntityInstances(entity.NODE) {
+		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s", repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetAllMetrics())
 	}
 }

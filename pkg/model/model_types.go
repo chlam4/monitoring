@@ -1,4 +1,4 @@
-package metric
+package model
 
 type EntityId string
 type EntityType string
