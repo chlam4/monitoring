@@ -44,9 +44,9 @@ func (repo SimpleMetricRepo) SetEntityInstances(repoEntities []repository.Reposi
 
 func (repo SimpleMetricRepo) SetMetricValue(
 	entityId model.EntityId,
-	metricKey metric.MetricKey,
+	key repository.EntityMetricKey,
 	value metric.MetricValue,
 ) {
 	repoEntity := repo.GetEntity(entityId)
-	repoEntity.SetMetricValue(metricKey, value)
+	repoEntity.SetMetricValue(key, value)
 }

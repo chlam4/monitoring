@@ -11,5 +11,5 @@ type Repository interface {
 	GetAllEntityInstances() []RepositoryEntity
 	GetEntityInstances(entityType model.EntityType) []RepositoryEntity
 	SetEntityInstances([]RepositoryEntity)
-	SetMetricValue(entityId model.EntityId, metricKey metric.MetricKey, value metric.MetricValue)
+	SetMetricValue(entityId model.EntityId, metricKey EntityMetricKey, value metric.MetricValue)
 }

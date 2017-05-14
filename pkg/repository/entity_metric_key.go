@@ -1,9 +1,8 @@
-package metric
+package repository
 
 import "github.com/chlam4/monitoring/pkg/model"
 
-type MetricKey struct {
-	EntityType   model.EntityType
+type EntityMetricKey struct {
 	ResourceType model.ResourceType
 	PropType     model.MetricPropType
 }

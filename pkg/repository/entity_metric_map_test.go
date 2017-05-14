@@ -1,7 +1,8 @@
-package metric
+package repository
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/chlam4/monitoring/pkg/model/metric"
 	"github.com/chlam4/monitoring/pkg/model/property"
 	"github.com/chlam4/monitoring/pkg/model/resource"
 	"testing"
@@ -23,25 +24,25 @@ var TestMetrics = []struct {
 
 func TestMetricMap(t *testing.T) {
 
-	metricMap := &MetricMap{}
+	metricMap := &EntityMetricMap{}
 
 	// Add all test metrics into the metric map
 	//
-	for _, metric := range TestMetrics {
-		metricMap.SetMetricValue(metric.resourceType, metric.propType, MetricValue(metric.value))
+	for _, testMetric := range TestMetrics {
+		metricMap.SetMetricValue(testMetric.resourceType, testMetric.propType, metric.MetricValue(testMetric.value))
 	}
 	//
 	// Retrieve the value for each metric and confirm it's the same as entered
 	//
-	for _, metric := range TestMetrics {
-		value, err := metricMap.GetMetricValue(metric.resourceType, metric.propType)
+	for _, testMetric := range TestMetrics {
+		value, err := metricMap.GetMetricValue(testMetric.resourceType, testMetric.propType)
 		if err != nil {
 			t.Errorf("Error while retrieving metric (%v, %v) from map %v: %s",
-				metric.resourceType, metric.propType, metricMap, err)
+				testMetric.resourceType, testMetric.propType, metricMap, err)
 		}
-		if value != MetricValue(metric.value) {
+		if value != metric.MetricValue(testMetric.value) {
 			t.Errorf("Retrieved value %v of metric (%v, %v) from metric map %v is not the same as entered %v",
-				value, metric.resourceType, metric.propType, metricMap, metric.value)
+				value, testMetric.resourceType, testMetric.propType, metricMap, testMetric.value)
 
 		}
 	}

@@ -11,7 +11,7 @@ type RepositoryEntity interface {
 	GetId() model.EntityId
 	GetType() model.EntityType
 	GetNodeIp() model.NodeIp
-	GetAllMetrics() metric.MetricMap
-	GetMetricValue(metricKey metric.MetricKey) (metric.MetricValue, error)
-	SetMetricValue(metricKey metric.MetricKey, value metric.MetricValue)
+	GetAllMetrics() EntityMetricMap
+	GetMetricValue(metricKey EntityMetricKey) (metric.MetricValue, error)
+	SetMetricValue(metricKey EntityMetricKey, value metric.MetricValue)
 }
