@@ -21,5 +21,5 @@ type Repository interface {
 	SetEntityInstances([]RepositoryEntity)
 
 	// SetMetricValue() sets the value of the given metric in the repository
-	SetMetricValue(entityId model.EntityId, metricKey EntityMetricKey, value model.MetricValue)
+	SetMetricValue(entityId model.EntityId, metricKey EntityMetricKey, value model.MetricValue) error
 }

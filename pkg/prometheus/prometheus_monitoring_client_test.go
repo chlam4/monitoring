@@ -14,7 +14,7 @@ import (
 
 func init() {
 	flag.Set("alsologtostderr", "true")
-	//flag.Set("v", "5")
+	flag.Set("v", "5")
 }
 
 func TestPrometheusMonitor(t *testing.T) {
@@ -36,7 +36,7 @@ func TestPrometheusMonitor(t *testing.T) {
 	repoEntities := []repository.RepositoryEntity{
 		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "192.168.99.100"),
 		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "10.10.172.235"),
-		simpleRepo.NewSimpleMetricRepoEntity(entity.POD, "10.0.2.15"),
+		simpleRepo.NewSimpleMetricRepoEntity(entity.POD, "prometheus-k8s-0"),
 	}
 	repo := simpleRepo.NewSimpleMetricRepo()
 	repo.SetEntityInstances(repoEntities)

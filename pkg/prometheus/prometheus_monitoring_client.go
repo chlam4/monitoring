@@ -73,7 +73,11 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 					ResourceType: metricMeta.MetricKey.ResourceType,
 					PropType:     metricMeta.MetricKey.PropType,
 				}
-				repo.SetMetricValue(entityId, entityMetricKey, model.MetricValue(sample.Value))
+				err = repo.SetMetricValue(entityId, entityMetricKey, model.MetricValue(sample.Value))
+				if err != nil {
+					glog.Infof("Unable to set metric value for entity id %v with metric key %v and value %v: %s",
+						entityId, entityMetricKey, sample.Value, err)
+				}
 			}
 		default:
 			glog.Warningf("Unexpected/unsupported data type returned from Prometheus query %v: %v", query, value)
