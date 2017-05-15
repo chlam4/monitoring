@@ -4,13 +4,13 @@ import (
 	"github.com/chlam4/monitoring/pkg/model/entity"
 	"github.com/chlam4/monitoring/pkg/model/property"
 	"github.com/chlam4/monitoring/pkg/model/resource"
-	"github.com/chlam4/monitoring/pkg/model/metric"
+	"github.com/chlam4/monitoring/pkg/model"
 )
 
 type Query string
 
 // MetricQueryMap defines for each given MetricKey which Prometheus query to use to collect the metric data
-var MetricQueryMap = map[metric.MetricKey]Query{
+var MetricQueryMap = map[model.MetricKey]Query{
 	//
 	// TODO: Revisit Node CPU stats more carefully -
 	// 	Do we need per-core stats, or user vs system vs iowait vs steal stats?

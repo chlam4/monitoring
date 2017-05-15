@@ -1,7 +1,9 @@
+// The resource package contains definitions within the context of resource
 package resource
 
 import "github.com/chlam4/monitoring/pkg/model"
 
+// List of resource types
 const (
 	CPU      model.ResourceType = "CPU"
 	MEM      model.ResourceType = "MEM"

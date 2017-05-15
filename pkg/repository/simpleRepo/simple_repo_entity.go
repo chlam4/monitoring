@@ -2,7 +2,6 @@ package simpleRepo
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/metric"
 	"github.com/chlam4/monitoring/pkg/repository"
 )
 
@@ -42,13 +41,13 @@ func (repoEntity SimpleMetricRepoEntity) GetAllMetrics() repository.EntityMetric
 }
 
 // GetMetricValue returns the metric value of the given resource type and metric property type
-func (repoEntity SimpleMetricRepoEntity) GetMetricValue(metricKey repository.EntityMetricKey) (metric.MetricValue, error) {
+func (repoEntity SimpleMetricRepoEntity) GetMetricValue(metricKey repository.EntityMetricKey) (model.MetricValue, error) {
 	return repoEntity.metricMap.GetMetricValue(metricKey.ResourceType, metricKey.PropType)
 }
 
 func (repoEntity SimpleMetricRepoEntity) SetMetricValue(
 	key repository.EntityMetricKey,
-	value metric.MetricValue,
+	value model.MetricValue,
 ) {
 	repoEntity.metricMap.SetMetricValue(key.ResourceType, key.PropType, value)
 }

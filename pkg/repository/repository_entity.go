@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/metric"
 )
 
 // RepositoryEntity defines a set of interfaces to access a repository entity in the metric Repository.
@@ -12,6 +11,6 @@ type RepositoryEntity interface {
 	GetType() model.EntityType
 	GetNodeIp() model.NodeIp
 	GetAllMetrics() EntityMetricMap
-	GetMetricValue(metricKey EntityMetricKey) (metric.MetricValue, error)
-	SetMetricValue(metricKey EntityMetricKey, value metric.MetricValue)
+	GetMetricValue(metricKey EntityMetricKey) (model.MetricValue, error)
+	SetMetricValue(metricKey EntityMetricKey, value model.MetricValue)
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/chlam4/monitoring/pkg/client"
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/metric"
 	"github.com/golang/glog"
 	prometheusHttpClient "github.com/prometheus/client_golang/api"
 	prometheus "github.com/prometheus/client_golang/api/prometheus/v1"
@@ -72,7 +71,7 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 						ResourceType: metricMeta.MetricKey.ResourceType,
 						PropType: metricMeta.MetricKey.PropType,
 					}
-					repo.SetMetricValue(entityId, entityMetricKey, metric.MetricValue(sample.Value))
+					repo.SetMetricValue(entityId, entityMetricKey, model.MetricValue(sample.Value))
 				}
 			}
 		default:

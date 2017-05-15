@@ -2,7 +2,6 @@ package simpleRepo
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/metric"
 	"github.com/chlam4/monitoring/pkg/repository"
 )
 
@@ -45,7 +44,7 @@ func (repo SimpleMetricRepo) SetEntityInstances(repoEntities []repository.Reposi
 func (repo SimpleMetricRepo) SetMetricValue(
 	entityId model.EntityId,
 	key repository.EntityMetricKey,
-	value metric.MetricValue,
+	value model.MetricValue,
 ) {
 	repoEntity := repo.GetEntity(entityId)
 	repoEntity.SetMetricValue(key, value)

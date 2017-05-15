@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/metric"
 	"github.com/chlam4/monitoring/pkg/model/property"
 	"github.com/chlam4/monitoring/pkg/model/resource"
 	"testing"
@@ -29,7 +28,7 @@ func TestMetricMap(t *testing.T) {
 	// Add all test metrics into the metric map
 	//
 	for _, testMetric := range TestMetrics {
-		metricMap.SetMetricValue(testMetric.resourceType, testMetric.propType, metric.MetricValue(testMetric.value))
+		metricMap.SetMetricValue(testMetric.resourceType, testMetric.propType, model.MetricValue(testMetric.value))
 	}
 	//
 	// Retrieve the value for each metric and confirm it's the same as entered
@@ -40,7 +39,7 @@ func TestMetricMap(t *testing.T) {
 			t.Errorf("Error while retrieving metric (%v, %v) from map %v: %s",
 				testMetric.resourceType, testMetric.propType, metricMap, err)
 		}
-		if value != metric.MetricValue(testMetric.value) {
+		if value != model.MetricValue(testMetric.value) {
 			t.Errorf("Retrieved value %v of metric (%v, %v) from metric map %v is not the same as entered %v",
 				value, testMetric.resourceType, testMetric.propType, metricMap, testMetric.value)
 

@@ -1,4 +1,4 @@
-package metric
+package model
 
 const (
 	CPU_MULTIPLIER float64 = 2000
