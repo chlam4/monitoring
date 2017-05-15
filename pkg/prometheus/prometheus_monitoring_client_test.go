@@ -14,7 +14,7 @@ import (
 
 func init() {
 	flag.Set("alsologtostderr", "true")
-	flag.Set("v", "5")
+	//flag.Set("v", "5")
 }
 
 func TestPrometheusMonitor(t *testing.T) {

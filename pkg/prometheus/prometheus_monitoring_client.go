@@ -9,7 +9,6 @@ import (
 	prometheusHttpClient "github.com/prometheus/client_golang/api"
 	prometheus "github.com/prometheus/client_golang/api/prometheus/v1"
 	prometheusModel "github.com/prometheus/common/model"
-	"strings"
 	"time"
 )
 
@@ -56,7 +55,7 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 		//
 		// Send a query to Prometheus for each required metric
 		//
-		value, err := monitor.PrometheusApi.Query(context.Background(), string(query), time.Now())
+		value, err := monitor.PrometheusApi.Query(context.Background(), string(query.queryString), time.Now())
 		if err != nil {
 			glog.Errorf("Error querying Prometheus with query %v: %s", query, err)
 			continue
@@ -65,8 +64,11 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 		switch value.Type() {
 		case prometheusModel.ValVector:
 			for _, sample := range value.(prometheusModel.Vector) {
-				instanceName := string(sample.Metric["instance"])
-				entityId := model.EntityId(strings.Split(instanceName, ":")[0])
+				entityId, err := query.entityId(sample)
+				if err != nil {
+					glog.Errorf("No entity id is found in Prometheus metric sample %v: %s", sample, err)
+					continue
+				}
 				entityMetricKey := repository.EntityMetricKey{
 					ResourceType: metricMeta.MetricKey.ResourceType,
 					PropType:     metricMeta.MetricKey.PropType,
