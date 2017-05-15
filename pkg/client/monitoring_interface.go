@@ -22,8 +22,8 @@ type MonitorTarget struct {
 }
 
 // MakeMonitorTarget creates a monitor target given a repository and the metric defs
-func MakeMonitorTarget(repo repository.Repository, monTemplates []template.MonitoringTemplate) MonitorTarget {
+func MakeMonitorTarget(repo repository.Repository, monTemplate template.MonitoringTemplate) MonitorTarget {
 
-	monitoringProps := template.MakeMonitoringProps(repo, monTemplates)
+	monitoringProps := template.MakeMonitoringProps(repo, monTemplate)
 	return MonitorTarget{Repository: repo, MonitoringProps: monitoringProps}
 }

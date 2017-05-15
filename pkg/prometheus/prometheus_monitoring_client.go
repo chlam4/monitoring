@@ -11,6 +11,7 @@ import (
 	prometheusModel "github.com/prometheus/common/model"
 	"strings"
 	"time"
+	"github.com/chlam4/monitoring/pkg/repository"
 )
 
 type PrometheusMonitor struct {
@@ -44,9 +45,9 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 	//
 	// Send a query to Prometheus for each required metric
 	//
-	monProps := target.MonitoringProps.ByMonTemplate(repo)
-	for monTemplate, ip2IdMap := range monProps {
-		key := monTemplate.MetricKey
+	monProps := target.MonitoringProps.ByMetricMeta(repo)
+	for metricMeta, ip2IdMap := range monProps {
+		key := metricMeta.MetricKey
 		query, exists := MetricQueryMap[key]
 		if !exists {
 			glog.Warningf("Unsupported metric query: metric key = %v, supported queries = %v", key, MetricQueryMap)
@@ -67,8 +68,11 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 				if !exists {
 					glog.Warningf("No entity found for IP %v in metric sample %v", nodeIp, sample)
 				} else {
-					metricKey := monTemplate.ToEntityMetricKey()
-					repo.SetMetricValue(entityId, metricKey, metric.MetricValue(sample.Value))
+					entityMetricKey := repository.EntityMetricKey{
+						ResourceType: metricMeta.MetricKey.ResourceType,
+						PropType: metricMeta.MetricKey.PropType,
+					}
+					repo.SetMetricValue(entityId, entityMetricKey, metric.MetricValue(sample.Value))
 				}
 			}
 		default:

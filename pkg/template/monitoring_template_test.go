@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var TestMonTemplates = []struct {
+var TestMetricDefs = []struct {
 	entityType   model.EntityType
 	resourceType model.ResourceType
 	propType     model.MetricPropType
@@ -22,21 +22,21 @@ var TestMonTemplates = []struct {
 	{entity.APP, resource.CPU_PROV, property.CAP},
 }
 
-func TestMakeMetricDefWithDefaultSetter(t *testing.T) {
-	for _, testMonTemplate := range TestMonTemplates {
-		monTemplate := MakeMonitoringTemplateWithDefaultSetter(testMonTemplate.entityType, testMonTemplate.resourceType, testMonTemplate.propType)
-		if monTemplate.MetricKey.EntityType != testMonTemplate.entityType {
-			t.Errorf("Entity type in the metric def %v does not match with input %v", monTemplate, testMonTemplate.entityType)
+func TestMakeMetricMetaWithDefaultSetter(t *testing.T) {
+	for _, testMetricDef := range TestMetricDefs {
+		metricMeta := MakeMetricMetaWithDefaultSetter(testMetricDef.entityType, testMetricDef.resourceType, testMetricDef.propType)
+		if metricMeta.MetricKey.EntityType != testMetricDef.entityType {
+			t.Errorf("Entity type in the metric def %v does not match with input %v", metricMeta, testMetricDef.entityType)
 		}
-		if monTemplate.MetricKey.ResourceType != testMonTemplate.resourceType {
-			t.Errorf("Resource type in the metric def %v does not match with input %v", monTemplate, testMonTemplate.resourceType)
+		if metricMeta.MetricKey.ResourceType != testMetricDef.resourceType {
+			t.Errorf("Resource type in the metric def %v does not match with input %v", metricMeta, testMetricDef.resourceType)
 		}
-		if monTemplate.MetricKey.PropType != testMonTemplate.propType {
-			t.Errorf("Property type in the metric def %v does not match with input %v", monTemplate, testMonTemplate.propType)
+		if metricMeta.MetricKey.PropType != testMetricDef.propType {
+			t.Errorf("Property type in the metric def %v does not match with input %v", metricMeta, testMetricDef.propType)
 		}
-		_, ok := monTemplate.MetricSetter.(DefaultMetricSetter)
+		_, ok := metricMeta.MetricSetter.(DefaultMetricSetter)
 		if !ok {
-			t.Errorf("Setter in metric def %v is not the default metric setter", monTemplate)
+			t.Errorf("Setter in metric def %v is not the default metric setter", metricMeta)
 		}
 	}
 }

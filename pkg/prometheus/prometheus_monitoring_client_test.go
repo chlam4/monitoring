@@ -15,13 +15,13 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// What metrics do you want Prometheus to collect?
 	//
-	metricDefs := []template.MonitoringTemplate{
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
-		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
+	metricDefs := template.MonitoringTemplate{
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
+		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?

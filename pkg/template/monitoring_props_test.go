@@ -20,22 +20,22 @@ var TestEntities = []struct {
 	{entity.APP, "xyz", "127.0.0.1"},
 }
 
-func MakeTestMonTemplates() []MonitoringTemplate {
-	monTemplates := []MonitoringTemplate{}
-	for _, testMonTemplate := range TestMonTemplates {
-		metricDef := MakeMonitoringTemplateWithDefaultSetter(
-			testMonTemplate.entityType, testMonTemplate.resourceType, testMonTemplate.propType)
-		monTemplates = append(monTemplates, metricDef)
+func MakeTestMonTemplate() MonitoringTemplate {
+	monTemplate := MonitoringTemplate{}
+	for _, testMetricMeta := range TestMetricDefs {
+		metricMeta := MakeMetricMetaWithDefaultSetter(
+			testMetricMeta.entityType, testMetricMeta.resourceType, testMetricMeta.propType)
+		monTemplate = append(monTemplate, metricMeta)
 	}
-	return monTemplates
+	return monTemplate
 }
 
 func TestMonitoringProps(t *testing.T) {
 	repo := MakeTestRepo()
-	metricDefs := MakeTestMonTemplates()
+	metricDefs := MakeTestMonTemplate()
 	mProps := MakeMonitoringProps(repo, metricDefs)
 	spew.Dump(mProps)
-	byMetricDef := mProps.ByMonTemplate(repo)
+	byMetricDef := mProps.ByMetricMeta(repo)
 	spew.Dump(byMetricDef)
 }
 
