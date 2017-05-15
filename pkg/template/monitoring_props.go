@@ -1,33 +1,32 @@
-package meta
+package template
 
 import (
 	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/meta/setter"
 	"github.com/chlam4/monitoring/pkg/repository"
 )
 
 
 // MonitoringProps defines a set of metrics targeted to monitor for each entity
-type MonitoringProps map[model.EntityId][]setter.MetricDef
+type MonitoringProps map[model.EntityId][]MonitoringTemplate
 
 // MakeMonitoringProps creates a set of monitoring properties given a repository and the metric defs
-func MakeMonitoringProps(repo repository.Repository, metricDefs []setter.MetricDef) MonitoringProps {
+func MakeMonitoringProps(repo repository.Repository, monitoringTemplates []MonitoringTemplate) MonitoringProps {
 
 	monitoringProps := MonitoringProps{}
 
-	for _, metricDef := range metricDefs {
-		entities := repo.GetEntityInstances(metricDef.EntityType)
+	for _, monitoringTemplate := range monitoringTemplates {
+		entities := repo.GetEntityInstances(monitoringTemplate.MetricKey.EntityType)
 		for _, entity := range entities {
 			entityId := model.EntityId(entity.GetId())
-			monitoringProps[entityId] = append(monitoringProps[entityId], metricDef)
+			monitoringProps[entityId] = append(monitoringProps[entityId], monitoringTemplate)
 		}
 	}
 	return monitoringProps
 }
 
-// ByMetricDef rearranges MonitoringProps by MetricDef, with value being a map of NodeIp to EntityId
-func (byEntityId MonitoringProps) ByMetricDef(repo repository.Repository) map[setter.MetricDef]map[model.NodeIp]model.EntityId {
-	byMetricDef := map[setter.MetricDef]map[model.NodeIp]model.EntityId{}
+// ByMonTemplate rearranges MonitoringProps by MonitoringTemplate, with value being a map of NodeIp to EntityId
+func (byEntityId MonitoringProps) ByMonTemplate(repo repository.Repository) map[MonitoringTemplate]map[model.NodeIp]model.EntityId {
+	byMetricDef := map[MonitoringTemplate]map[model.NodeIp]model.EntityId{}
 	for entityId, metricDefs := range byEntityId {
 		for _, metricDef := range metricDefs {
 			ip2IdMap, exists := byMetricDef[metricDef]

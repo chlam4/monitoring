@@ -2,7 +2,7 @@ package prometheus
 
 import (
 	"github.com/chlam4/monitoring/pkg/client"
-	"github.com/chlam4/monitoring/pkg/meta/setter"
+	"github.com/chlam4/monitoring/pkg/template"
 	"github.com/chlam4/monitoring/pkg/model/entity"
 	"github.com/chlam4/monitoring/pkg/model/property"
 	"github.com/chlam4/monitoring/pkg/model/resource"
@@ -15,13 +15,13 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// What metrics do you want Prometheus to collect?
 	//
-	metricDefs := []setter.MetricDef{
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
-		setter.MakeMetricDefWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
+	metricDefs := []template.MonitoringTemplate{
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
+		template.MakeMonitoringTemplateWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?

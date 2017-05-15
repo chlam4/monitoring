@@ -1,4 +1,4 @@
-package setter
+package template
 
 import (
 	"github.com/chlam4/monitoring/pkg/model/metric"
