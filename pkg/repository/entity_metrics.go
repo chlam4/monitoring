@@ -12,6 +12,11 @@ import (
 // For example, all metrics of an entity can be stored in such a map.
 type EntityMetricMap map[model.ResourceType]map[model.MetricPropType]metric.MetricValue
 
+type EntityMetricKey struct {
+	ResourceType model.ResourceType
+	PropType     model.MetricPropType
+}
+
 // SetResourceMetric sets the metric value in the MetricMap for the given resource type and the metric property type
 func (metricMap EntityMetricMap) SetMetricValue(
 	resourceType model.ResourceType,
