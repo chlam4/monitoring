@@ -6,7 +6,7 @@ import (
 	"github.com/chlam4/monitoring/pkg/repository"
 )
 
-// MonitoringTemplate defines a set of metrics to collect and how the value is set in the metric repository
+// MonitoringTemplate defines a set of metric meta data to drive monitoring
 type MonitoringTemplate []MetricMeta
 
 // MetricMeta is the meta data of a metric, including the key of the metric and a metric setter
@@ -16,7 +16,7 @@ type MetricMeta struct {
 }
 
 // The MetricSetter interface defines what a metric setter does -
-// it sets the input value in the given metric repository entity
+// it defines how the input metric value is processed before setting the corresponding value in the repo entity.
 type MetricSetter interface {
 	SetMetricValue(entity repository.RepositoryEntity, key repository.EntityMetricKey, value metric.MetricValue)
 }
@@ -33,7 +33,7 @@ func (setter DefaultMetricSetter) SetMetricValue(
 	repoEntity.SetMetricValue(key, value)
 }
 
-// MakeMetricMetaWithDefaultSetter makes a MonitoringTemplate with given entity type, resource type and metric
+// MakeMetricMetaWithDefaultSetter makes a MetricMeta with given entity type, resource type and metric
 // property type, and the default metric setter.
 func MakeMetricMetaWithDefaultSetter(
 	entityType model.EntityType,
