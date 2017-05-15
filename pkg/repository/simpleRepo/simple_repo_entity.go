@@ -21,17 +21,14 @@ func NewSimpleMetricRepoEntity(
 	return SimpleMetricRepoEntity{entityId: entityId, entityType: entityType, nodeIp: nodeIp, metricMap: make(repository.EntityMetricMap)}
 }
 
-// GetId returns the id of the entity
 func (repoEntity SimpleMetricRepoEntity) GetId() model.EntityId {
 	return repoEntity.entityId
 }
 
-// GetType returns the type of the entity
 func (repoEntity SimpleMetricRepoEntity) GetType() model.EntityType {
 	return repoEntity.entityType
 }
 
-// GetNodeIp returns the type of the entity
 func (repoEntity SimpleMetricRepoEntity) GetNodeIp() model.NodeIp {
 	return repoEntity.nodeIp
 }
@@ -40,7 +37,6 @@ func (repoEntity SimpleMetricRepoEntity) GetAllMetrics() repository.EntityMetric
 	return repoEntity.metricMap
 }
 
-// GetMetricValue returns the metric value of the given resource type and metric property type
 func (repoEntity SimpleMetricRepoEntity) GetMetricValue(metricKey repository.EntityMetricKey) (model.MetricValue, error) {
 	return repoEntity.metricMap.GetMetricValue(metricKey.ResourceType, metricKey.PropType)
 }

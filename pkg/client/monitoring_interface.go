@@ -1,3 +1,5 @@
+// The client package defines the monitoring interface any client would implement to leverage the metric repository
+// and the monitoring template defined in this library.
 package client
 
 import (
@@ -6,14 +8,15 @@ import (
 )
 
 // Monitor defines the monitoring interface
-// Object that will fetch values for the given monitoring properties for all the entities in the repository
-// by connecting to the target
 type Monitor interface {
+	// GetMonitoringType() returns the monitoring type
 	GetMonitoringType() MONITORING_TYPE
+
+	// Monitor() performs monitoring and collect metrics as defined
 	Monitor(target *MonitorTarget) error
 }
 
-// MonitorTarget defines
+// MonitorTarget abstracts the arguments for the monitoring interface.
 type MonitorTarget struct {
 	targetId        string
 	config          interface{}
@@ -21,7 +24,7 @@ type MonitorTarget struct {
 	MonitoringProps template.MonitoringProps // meta data that defines what metrics to collect for what entities
 }
 
-// MakeMonitorTarget creates a monitor target given a repository and the metric defs
+// MakeMonitorTarget creates a monitor target based on the given a repository and the monitoring template
 func MakeMonitorTarget(repo repository.Repository, monTemplate template.MonitoringTemplate) MonitorTarget {
 
 	monitoringProps := template.MakeMonitoringProps(repo, monTemplate)

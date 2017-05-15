@@ -16,7 +16,7 @@ type EntityMetricKey struct {
 	PropType     model.MetricPropType
 }
 
-// SetResourceMetric sets the metric value in the MetricMap for the given resource type and the metric property type
+// SetMetricValue sets the metric value in the MetricMap for the given resource type and the metric property type
 func (metricMap EntityMetricMap) SetMetricValue(
 	resourceType model.ResourceType,
 	propType model.MetricPropType,
@@ -30,7 +30,7 @@ func (metricMap EntityMetricMap) SetMetricValue(
 	resourceMap[propType] = value
 }
 
-// GetResourceMetric retrieves the metric value from the MetricMap for the given resource type and the metric property type
+// GetMetricValue retrieves the metric value from the MetricMap for the given resource type and the metric property type
 func (metricMap EntityMetricMap) GetMetricValue(
 	resourceType model.ResourceType,
 	propType model.MetricPropType,

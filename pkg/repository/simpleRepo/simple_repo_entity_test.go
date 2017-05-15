@@ -13,7 +13,7 @@ var TestEntities = []struct {
 }{
 	{entity.NODE, "foo", "1.2.3.4"},
 	{entity.NODE, "bar", "192.168.99.100"},
-	{entity.CONTAINER, "123", "10.10.172.236"},
+	{entity.POD, "123", "10.10.172.236"},
 	{entity.APP, "xyz", "127.0.0.1"},
 }
 

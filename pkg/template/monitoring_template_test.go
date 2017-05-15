@@ -14,7 +14,7 @@ var TestMetricDefs = []struct {
 	propType     model.MetricPropType
 }{
 	{entity.NODE, resource.CPU, property.USED},
-	{entity.CONTAINER, resource.CPU, property.PEAK},
+	{entity.POD, resource.CPU, property.PEAK},
 	{entity.APP, resource.MEM, property.USED},
 	{entity.NODE, resource.MEM, property.AVERAGE},
 	{entity.NODE, resource.MEM_PROV, property.CAP},
