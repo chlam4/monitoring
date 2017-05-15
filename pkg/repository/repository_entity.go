@@ -13,9 +13,6 @@ type RepositoryEntity interface {
 	// GetType() returns the type of the associated entity
 	GetType() model.EntityType
 
-	// GetNodeIp() returns the IP address of the node associated with the entity
-	GetNodeIp() model.NodeIp
-
 	// GetAllMetrics() returns all metrics of the entity in the form of EntityMetricMap
 	GetAllMetrics() EntityMetricMap
 

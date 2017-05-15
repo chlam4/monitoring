@@ -7,6 +7,7 @@ import (
 	"github.com/chlam4/monitoring/pkg/model"
 )
 
+// Query defines the data type of Prometheus query strings
 type Query string
 
 // MetricQueryMap defines for each given MetricKey which Prometheus query to use to collect the metric data
@@ -24,4 +25,5 @@ var MetricQueryMap = map[model.MetricKey]Query{
 	// TODO: Handle multiple interfaces per node, transmit and receive
 	//
 	{entity.NODE, resource.NETWORK, property.USED}: "sum(rate(node_network_receive_bytes[10m]) + rate(node_network_transmit_bytes[10m])) by (job, instance)",
+	{entity.POD, resource.MEM, property.USED}: "sum(container_memory_usage_bytes) by (instance, pod_name)",
 }

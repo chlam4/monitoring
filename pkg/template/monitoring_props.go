@@ -24,18 +24,17 @@ func MakeMonitoringProps(repo repository.Repository, monitoringTemplate Monitori
 	return monitoringProps
 }
 
-// ByMetricMeta rearranges MonitoringProps by MetricMeta, with value being a map of NodeIp to EntityId
-func (byEntityId MonitoringProps) ByMetricMeta(repo repository.Repository) map[MetricMeta]map[model.NodeIp]model.EntityId {
-	byMetricMeta := map[MetricMeta]map[model.NodeIp]model.EntityId{}
+// ByMetricMeta rearranges MonitoringProps by MetricMeta, with value being a list of EntityId's
+func (byEntityId MonitoringProps) ByMetricMeta(repo repository.Repository) map[MetricMeta][]model.EntityId {
+	byMetricMeta := map[MetricMeta][]model.EntityId{}
 	for entityId, monTemplate := range byEntityId {
 		for _, metricMeta := range monTemplate {
-			ip2IdMap, exists := byMetricMeta[metricMeta]
+			ids, exists := byMetricMeta[metricMeta]
 			if !exists {
-				ip2IdMap = map[model.NodeIp]model.EntityId{}
+				ids =[]model.EntityId{}
 			}
-			repoEntity := repo.GetEntity(entityId)
-			ip2IdMap[repoEntity.GetNodeIp()] = entityId
-			byMetricMeta[metricMeta] = ip2IdMap
+			ids = append(ids, entityId)
+			byMetricMeta[metricMeta] = ids
 		}
 	}
 	return byMetricMeta

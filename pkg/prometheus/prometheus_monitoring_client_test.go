@@ -1,15 +1,21 @@
 package prometheus
 
 import (
+	"flag"
 	"github.com/chlam4/monitoring/pkg/client"
-	"github.com/chlam4/monitoring/pkg/template"
 	"github.com/chlam4/monitoring/pkg/model/entity"
 	"github.com/chlam4/monitoring/pkg/model/property"
 	"github.com/chlam4/monitoring/pkg/model/resource"
 	"github.com/chlam4/monitoring/pkg/repository"
 	"github.com/chlam4/monitoring/pkg/repository/simpleRepo"
+	"github.com/chlam4/monitoring/pkg/template"
 	"testing"
 )
+
+func init() {
+	flag.Set("alsologtostderr", "true")
+	flag.Set("v", "5")
+}
 
 func TestPrometheusMonitor(t *testing.T) {
 	//
@@ -22,13 +28,15 @@ func TestPrometheusMonitor(t *testing.T) {
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.AVERAGE),
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
+		template.MakeMetricMetaWithDefaultSetter(entity.POD, resource.MEM, property.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?
 	//
 	repoEntities := []repository.RepositoryEntity{
-		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "abc", "192.168.99.100"),
-		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "xyz", "10.10.172.235"),
+		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "192.168.99.100"),
+		simpleRepo.NewSimpleMetricRepoEntity(entity.NODE, "10.10.172.235"),
+		simpleRepo.NewSimpleMetricRepoEntity(entity.POD, "10.0.2.15"),
 	}
 	repo := simpleRepo.NewSimpleMetricRepo()
 	repo.SetEntityInstances(repoEntities)
@@ -39,8 +47,8 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// Call Prometheus to collect metrics
 	//
-	promeServerUrl := "http://192.168.99.100:30900"
-	promMonitor, err := NewPrometheusMonitor(promeServerUrl)
+	promServerUrl := "http://192.168.99.100:30900"
+	promMonitor, err := NewPrometheusMonitor(promServerUrl)
 	if err != nil {
 		t.Errorf("Error instantiating a Prometheus Monitor instance: %s", err)
 	}
@@ -48,7 +56,8 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// Process the collected metrics
 	//
-	for _, repoEntity := range repo.GetEntityInstances(entity.NODE) {
-		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s", repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetAllMetrics())
+	for _, repoEntity := range repo.GetAllEntityInstances() {
+		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s",
+			repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetAllMetrics())
 	}
 }

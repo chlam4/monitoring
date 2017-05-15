@@ -9,9 +9,6 @@ type EntityId string
 // Various types of entity are listed in the entity subpackage.
 type EntityType string
 
-// NodeIP defines the data type of the IP address of the node associated with the entity.
-type NodeIp string
-
 // ResourceType defines the data type of the resource type.
 // Various types of resource are listed in the resource subpackage.
 type ResourceType string

@@ -12,7 +12,7 @@ func TestSimpleMetricRepo(t *testing.T) {
 	//
 	repoEntities := []repository.RepositoryEntity{}
 	for _, testEntity := range TestEntities {
-		repoEntity := NewSimpleMetricRepoEntity(testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
+		repoEntity := NewSimpleMetricRepoEntity(testEntity.entityType, testEntity.entityId)
 		repoEntities = append(repoEntities, repoEntity)
 	}
 	//
@@ -33,9 +33,6 @@ func TestSimpleMetricRepo(t *testing.T) {
 		} else if repoEntity.GetId() != testEntity.entityId {
 			t.Errorf("Retrieved id %v from repo %v for entity type %v and id %v is not the same as entered %v",
 				repoEntity.GetId(), repo, testEntity.entityType, testEntity.entityId, testEntity.entityId)
-		} else if repoEntity.GetNodeIp() != testEntity.nodeIp {
-			t.Errorf("Retrieved node ip %v from repo %v for entity type %v and id %v is not the same as entered %v",
-				repoEntity.GetNodeIp(), repo, testEntity.entityType, testEntity.entityId, testEntity.nodeIp)
 		}
 	}
 	//

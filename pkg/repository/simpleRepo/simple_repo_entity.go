@@ -9,16 +9,14 @@ import (
 type SimpleMetricRepoEntity struct {
 	entityType model.EntityType
 	entityId   model.EntityId
-	nodeIp     model.NodeIp
 	metricMap  repository.EntityMetricMap
 }
 
 func NewSimpleMetricRepoEntity(
 	entityType model.EntityType,
 	entityId model.EntityId,
-	nodeIp model.NodeIp,
 ) repository.RepositoryEntity {
-	return SimpleMetricRepoEntity{entityId: entityId, entityType: entityType, nodeIp: nodeIp, metricMap: make(repository.EntityMetricMap)}
+	return SimpleMetricRepoEntity{entityId: entityId, entityType: entityType, metricMap: make(repository.EntityMetricMap)}
 }
 
 func (repoEntity SimpleMetricRepoEntity) GetId() model.EntityId {
@@ -27,10 +25,6 @@ func (repoEntity SimpleMetricRepoEntity) GetId() model.EntityId {
 
 func (repoEntity SimpleMetricRepoEntity) GetType() model.EntityType {
 	return repoEntity.entityType
-}
-
-func (repoEntity SimpleMetricRepoEntity) GetNodeIp() model.NodeIp {
-	return repoEntity.nodeIp
 }
 
 func (repoEntity SimpleMetricRepoEntity) GetAllMetrics() repository.EntityMetricMap {
