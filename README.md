@@ -1,7 +1,7 @@
 # turbo-go-monitoring
 
 This is a GO monitoring library that defines a set of monitoring interfaces, including
-[metric repository](pkg/repostiory/repository.go) and [monitoring template](pkg/template/monitoring_template.go)
+[metric repository](pkg/repository/repository.go) and [monitoring template](pkg/template/monitoring_template.go)
 interfaces.  Any target-specific monitoring client can implement such interfaces, so that upstream processing such as
 Turbo DTO building may be coded based on the common interfaces without needing to adapt every time a new type of target
 is introduced.
