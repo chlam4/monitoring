@@ -33,29 +33,35 @@ other use cases may exist to have a custom setter.
 
 ## Prometheus Monitoring Client
 
-This library also provides a monitoring client implementation for [Prometheus](https://prometheus.io/).  The test
-function [`TestPrometheusMonitor()`](pkg/prometheus/prometheus_monitoring_client_test.go) illustrates how the
-[Prometheus client](pkg/prometheus) can be used to collect metrics.  Steps are:
-1. Define a monitoring template to tell Prometheus what metrics to collect.
-2. Define the list of entities for Prometheus to monitor, and put them into the metric repository.
-3. Instantiate `PrometheusMonitor` - the Prometheus monitoring client and call the `Monitor()` method.
-4. The test code dumps out all the collected metrics.
-
-The Prometheus monitoring client is equipped with a [`MetricQueryMap`](pkg/prometheus/prometheus_queries.go).  The
-`MetricQueryMap` defines what query to use for a defined metric.  It currently supports the following metric queries:
+This library also provides a monitoring client implementation for [Prometheus](https://prometheus.io/).  The
+[Prometheus monitoring client](pkg/prometheus) is equipped with a
+[`MetricQueryMap`](pkg/prometheus/prometheus_queries.go) that defines what query to use for a defined metric and how
+the entity id is obtained from the query result.  Currently, the following metric queries are supported:
 * Node-level CPU/memory/network stats from the [Prometheus node exporter](https://github.com/prometheus/node_exporter)
 * POD CPU/memory/disk stats from [Kubernetes](https://github.com/kubernetes/kubernetes).
 
+To add support for more metric queries, one can simply add more entries to the map and implement new get-entity-id
+functions as necessary.
+
+To use this monitoring client, please refer to the test function
+[`TestPrometheusMonitor()`](pkg/prometheus/prometheus_monitoring_client_test.go).  The major steps are:
+1. Define a monitoring template to tell Prometheus what metrics to collect.
+2. Define the list of entities for Prometheus to monitor.  The entity id must match what Prometheus is able to get from
+the corresponding query results.
+3. Instantiate `PrometheusMonitor` - the Prometheus monitoring client and call the `Monitor()` method.
+4. The test code dumps out all the collected metrics.
+
+
 ### Test with minikube and kube-prometheus
 
-To try out the test function, one can set up the test environment by installing
+To try out the test function, one way is to set up the test environment by installing
 [`minikube`](https://github.com/kubernetes/minikube) and then
 [`kube-prometheus`](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus).  The former
 sets up a local mini Kubernetes cluster, while the latter deploys Prometheus components including the node exporter
 into the cluster.
 
-Once the test environment is set up, we can run the `TestPrometheusMonitor()`.  If needed, customize the monitoring
-template, the list of entities, and the Prometheus server address.
+Once the test environment is set up, please run the `TestPrometheusMonitor()`.  If needed, customize the Prometheus
+server address, the monitoring template, and the list of entities.
 
 ### Test with Prometheus server and exporters
 
