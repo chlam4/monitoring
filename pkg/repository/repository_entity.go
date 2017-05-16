@@ -13,6 +13,9 @@ type RepositoryEntity interface {
 	// GetType() returns the type of the associated entity
 	GetType() model.EntityType
 
+	// GetTypedId() returns the type and id of the associated entity
+	GetTypedId() model.EntityTypedId
+
 	// GetAllMetrics() returns all metrics of the entity in the form of EntityMetricMap
 	GetAllMetrics() EntityMetricMap
 

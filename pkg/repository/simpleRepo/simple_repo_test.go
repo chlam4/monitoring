@@ -19,14 +19,14 @@ func TestSimpleMetricRepo(t *testing.T) {
 	// Construct a repo and add those repo entities to the repo
 	//
 	repo := NewSimpleMetricRepo()
-	repo.SetEntityInstances(repoEntities)
+	repo.SetEntities(repoEntities)
 	//
 	// Check GetEntity result
 	//
 	for _, testEntity := range TestEntities {
-		repoEntity := repo.GetEntity(testEntity.entityId)
-		if repoEntity == nil {
-			t.Errorf("No repo entity for type %v and id %v found in repo %v", testEntity.entityType, testEntity.entityId, repo)
+		repoEntity, err := repo.GetEntity(testEntity.entityType, testEntity.entityId)
+		if err != nil {
+			t.Errorf("No repo entity for type %v and id %v found in repo %v: %s", testEntity.entityType, testEntity.entityId, repo, err)
 		} else if repoEntity.GetType() != testEntity.entityType {
 			t.Errorf("Retrieved type %v from repo %v for entity type %v and id %v is not the same as entered %v",
 				repoEntity.GetType(), repo, testEntity.entityType, testEntity.entityId, testEntity.entityType)
@@ -39,13 +39,13 @@ func TestSimpleMetricRepo(t *testing.T) {
 	// Check GetEntityInstances result
 	//
 	fakeEntityType := model.EntityType("fakeEntityType")
-	repoEntities = repo.GetEntityInstances(fakeEntityType)
+	repoEntities = repo.GetEntitiesByType(fakeEntityType)
 	if repoEntities == nil {
 		t.Errorf("GetEntityInstances() for type %v on repo %v should not return nil; " +
 			"an empty list is expected instead", fakeEntityType, repo)
 	}
 	for _, testEntity := range TestEntities {
-		repoEntities = repo.GetEntityInstances(testEntity.entityType)
+		repoEntities = repo.GetEntitiesByType(testEntity.entityType)
 		if repoEntities == nil || len(repoEntities) == 0 {
 			t.Errorf("GetEntityInstances() for type %v on repo %v should not be nil or empty.", testEntity.entityType, repo)
 		}

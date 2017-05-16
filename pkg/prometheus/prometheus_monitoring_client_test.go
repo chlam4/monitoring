@@ -41,7 +41,7 @@ func TestPrometheusMonitor(t *testing.T) {
 		simpleRepo.NewSimpleMetricRepoEntity(entity.POD, "prometheus-k8s-0"),
 	}
 	repo := simpleRepo.NewSimpleMetricRepo()
-	repo.SetEntityInstances(repoEntities)
+	repo.SetEntities(repoEntities)
 	//
 	// Construct the monitor target
 	//
@@ -58,7 +58,7 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// Process the collected metrics
 	//
-	for _, repoEntity := range repo.GetAllEntityInstances() {
+	for _, repoEntity := range repo.GetAllEntities() {
 		t.Logf("Metrics collected for (%v, %v) are as follows:\n %s",
 			repoEntity.GetType(), repoEntity.GetId(), repoEntity.GetAllMetrics())
 	}

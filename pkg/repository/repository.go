@@ -8,18 +8,23 @@ import (
 
 // A Repository defines a set of interfaces to access its entities and their metrics
 type Repository interface {
-	// GetEntity() returns the RepositoryEntity associated with the input entity id
-	GetEntity(id model.EntityId) RepositoryEntity
+	// GetEntity() returns the RepositoryEntity associated with the given entity type and id
+	GetEntity(entityType model.EntityType, entityId model.EntityId) (RepositoryEntity, error)
 
-	// GetAllEntityInstances() returns the list of all RepositoryEntity's in the repository
-	GetAllEntityInstances() []RepositoryEntity
+	// GetAllEntities() returns the list of all RepositoryEntity's in the repository
+	GetAllEntities() []RepositoryEntity
 
-	// GetEntityInstances() returns the list of RepositoryEntity's matching the given entity type
-	GetEntityInstances(entityType model.EntityType) []RepositoryEntity
+	// GetEntitiesByType() returns the list of RepositoryEntity's matching the given entity type
+	GetEntitiesByType(entityType model.EntityType) []RepositoryEntity
 
-	// SetEntityInstances() updates the repository with the given set of RepositoryEntity's
-	SetEntityInstances([]RepositoryEntity)
+	// SetEntities() updates the repository with the given set of RepositoryEntity's
+	SetEntities([]RepositoryEntity)
 
 	// SetMetricValue() sets the value of the given metric in the repository
-	SetMetricValue(entityId model.EntityId, metricKey EntityMetricKey, value model.MetricValue) error
+	SetMetricValue(
+		entityType model.EntityType,
+		entityId model.EntityId,
+		metricKey EntityMetricKey,
+		value model.MetricValue,
+	) error
 }

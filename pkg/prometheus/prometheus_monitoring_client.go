@@ -73,7 +73,7 @@ func (monitor *PrometheusMonitor) Monitor(target *client.MonitorTarget) error {
 					ResourceType: metricMeta.MetricKey.ResourceType,
 					PropType:     metricMeta.MetricKey.PropType,
 				}
-				err = repo.SetMetricValue(entityId, entityMetricKey, model.MetricValue(sample.Value))
+				err = repo.SetMetricValue(metricMeta.MetricKey.EntityType, entityId, entityMetricKey, model.MetricValue(sample.Value))
 				if err != nil {
 					glog.Infof("Unable to set metric value for entity id %v with metric key %v and value %v: %s",
 						entityId, entityMetricKey, sample.Value, err)

@@ -27,6 +27,10 @@ func (repoEntity SimpleMetricRepoEntity) GetType() model.EntityType {
 	return repoEntity.entityType
 }
 
+func (repoEntity SimpleMetricRepoEntity) GetTypedId() model.EntityTypedId {
+	return model.EntityTypedId{EntityType: repoEntity.entityType, EntityId: repoEntity.entityId}
+}
+
 func (repoEntity SimpleMetricRepoEntity) GetAllMetrics() repository.EntityMetricMap {
 	return repoEntity.metricMap
 }

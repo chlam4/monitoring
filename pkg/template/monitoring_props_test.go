@@ -51,7 +51,7 @@ func MakeTestRepo() repository.Repository {
 	// Construct a repo and add those repo entities to the repo
 	//
 	repo := simpleRepo.NewSimpleMetricRepo()
-	repo.SetEntityInstances(repoEntities)
+	repo.SetEntities(repoEntities)
 
 	return repo
 }
