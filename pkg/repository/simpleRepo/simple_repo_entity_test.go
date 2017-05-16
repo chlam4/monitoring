@@ -10,10 +10,10 @@ var TestEntities = []struct {
 	entityType model.EntityType
 	entityId   model.EntityId
 }{
-	{entity.NODE, "foo", "1.2.3.4"},
-	{entity.NODE, "bar", "192.168.99.100"},
-	{entity.POD, "123", "10.10.172.236"},
-	{entity.APP, "xyz", "127.0.0.1"},
+	{entity.NODE, "1.2.3.4"},
+	{entity.NODE, "192.168.99.100"},
+	{entity.POD, "abc"},
+	{entity.APP, "xyz"},
 }
 
 func TestSimpleMetricRepoEntity_GetId_GetType(t *testing.T) {
