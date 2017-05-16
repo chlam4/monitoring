@@ -3,7 +3,7 @@
 package repository
 
 import (
-	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
 )
 
 // A Repository defines a set of interfaces to access its entities and their metrics

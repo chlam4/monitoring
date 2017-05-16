@@ -1,10 +1,10 @@
 package template
 
 import (
-	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/entity"
-	"github.com/chlam4/monitoring/pkg/repository"
-	"github.com/chlam4/monitoring/pkg/repository/simpleRepo"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/entity"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository/simpleRepo"
 	"github.com/davecgh/go-spew/spew"
 	"testing"
 )

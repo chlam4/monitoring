@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/model/property"
-	"github.com/chlam4/monitoring/pkg/model/resource"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/property"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/resource"
 	"testing"
 )
 

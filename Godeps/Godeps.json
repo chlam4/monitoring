@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/chlam4/monitoring",
+	"ImportPath": "github.com/turbonomic/turbo-go-monitoring",
 	"GoVersion": "go1.8",
 	"GodepVersion": "v79",
 	"Packages": [

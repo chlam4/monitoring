@@ -2,13 +2,13 @@ package prometheus
 
 import (
 	"flag"
-	"github.com/chlam4/monitoring/pkg/client"
-	"github.com/chlam4/monitoring/pkg/model/entity"
-	"github.com/chlam4/monitoring/pkg/model/property"
-	"github.com/chlam4/monitoring/pkg/model/resource"
-	"github.com/chlam4/monitoring/pkg/repository"
-	"github.com/chlam4/monitoring/pkg/repository/simpleRepo"
-	"github.com/chlam4/monitoring/pkg/template"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/client"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/entity"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/property"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/resource"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository/simpleRepo"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/template"
 	"testing"
 )
 

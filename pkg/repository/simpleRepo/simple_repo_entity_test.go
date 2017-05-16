@@ -2,8 +2,8 @@ package simpleRepo
 
 import (
 	"testing"
-	"github.com/chlam4/monitoring/pkg/model/entity"
-	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model/entity"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
 )
 
 var TestEntities = []struct {

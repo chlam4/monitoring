@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/chlam4/monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
 )
 
 // RepositoryEntity defines a set of interfaces to access a repository entity in the metric Repository.

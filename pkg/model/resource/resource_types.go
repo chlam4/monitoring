@@ -1,7 +1,7 @@
 // The resource package contains definitions within the context of resource
 package resource
 
-import "github.com/chlam4/monitoring/pkg/model"
+import "github.com/turbonomic/turbo-go-monitoring/pkg/model"
 
 // List of resource types
 const (

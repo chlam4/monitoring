@@ -3,8 +3,8 @@
 package client
 
 import (
-	"github.com/chlam4/monitoring/pkg/template"
-	"github.com/chlam4/monitoring/pkg/repository"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/template"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository"
 )
 
 // Monitor defines the monitoring interface

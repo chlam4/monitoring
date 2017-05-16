@@ -2,8 +2,8 @@ package simpleRepo
 
 import (
 	"fmt"
-	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/repository"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository"
 )
 
 // SimpleMetricRepo is a simple implementation of the metric repository

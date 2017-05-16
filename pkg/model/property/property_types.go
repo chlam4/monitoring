@@ -1,7 +1,7 @@
 // The property package contains definitions within the context of metric property.
 package property
 
-import "github.com/chlam4/monitoring/pkg/model"
+import "github.com/turbonomic/turbo-go-monitoring/pkg/model"
 
 // List of metric property types
 const (

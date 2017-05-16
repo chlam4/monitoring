@@ -1,8 +1,8 @@
 package template
 
 import (
-	"github.com/chlam4/monitoring/pkg/model"
-	"github.com/chlam4/monitoring/pkg/repository"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/model"
+	"github.com/turbonomic/turbo-go-monitoring/pkg/repository"
 )
 
 // MonitoringTemplate defines a set of metric meta data to drive monitoring
