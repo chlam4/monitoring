@@ -32,6 +32,8 @@ var MetricQueryMap = map[model.MetricKey]Query{
 	//
 	{entity.NODE, resource.NETWORK, property.USED}: {"sum(rate(node_network_receive_bytes[10m]) + rate(node_network_transmit_bytes[10m])) by (job, instance)", fromInstanceName},
 	{entity.POD, resource.MEM, property.USED}:      {"sum(container_memory_usage_bytes{image!=\"\"}) by (pod_name)", fromPodName},
+	{entity.POD, resource.CPU, property.USED}:      {"sum(rate(container_cpu_usage_seconds_total{image!=\"\"}[1m])) by (pod_name)", fromPodName},
+	{entity.POD, resource.DISK, property.USED}:     {"sum(container_fs_usage_bytes{image!=\"\"}) by (pod_name)", fromPodName},
 }
 
 // fromInstanceName() extracts the entity id from the instance field of the given Prometheus metric sample.

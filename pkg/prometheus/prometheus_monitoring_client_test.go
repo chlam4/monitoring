@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	flag.Set("alsologtostderr", "true")
+	//flag.Set("alsologtostderr", "true")
 	flag.Set("v", "5")
 }
 
@@ -21,7 +21,7 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// What metrics do you want Prometheus to collect?
 	//
-	metricDefs := template.MonitoringTemplate{
+	monTemplate := template.MonitoringTemplate{
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.CPU, property.USED),
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.USED),
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.CAP),
@@ -29,6 +29,8 @@ func TestPrometheusMonitor(t *testing.T) {
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.MEM, property.PEAK),
 		template.MakeMetricMetaWithDefaultSetter(entity.NODE, resource.NETWORK, property.USED),
 		template.MakeMetricMetaWithDefaultSetter(entity.POD, resource.MEM, property.USED),
+		template.MakeMetricMetaWithDefaultSetter(entity.POD, resource.CPU, property.USED),
+		template.MakeMetricMetaWithDefaultSetter(entity.POD, resource.DISK, property.USED),
 	}
 	//
 	// What entities do you want Prometheus to monitor?
@@ -43,7 +45,7 @@ func TestPrometheusMonitor(t *testing.T) {
 	//
 	// Construct the monitor target
 	//
-	monitorTarget := client.MakeMonitorTarget(repo, metricDefs)
+	monitorTarget := client.MakeMonitorTarget(repo, monTemplate)
 	//
 	// Call Prometheus to collect metrics
 	//
