@@ -54,3 +54,8 @@ into the cluster.
 
 Once the test environment is set up, we can run the `TestPrometheusMonitor()`.  If needed, customize the monitoring
 template, the list of entities, and the Prometheus server address.
+
+### Test with Prometheus server and exporters
+
+Another way to test is to install [Prometheus server](https://prometheus.io/docs/introduction/install/) and selected
+exporters such as the [node exporter](https://github.com/prometheus/node_exporter) yourself.
