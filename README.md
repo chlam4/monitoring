@@ -1,6 +1,6 @@
 # turbo-go-monitoring
 
-This is a GO monitoring library that defines a set of monitoring interfaces, including
+This is an experimental GO monitoring library that defines a set of monitoring interfaces, including
 [metric repository](pkg/repository/repository.go) and [monitoring template](pkg/template/monitoring_template.go)
 interfaces.  Any target-specific monitoring client can implement such interfaces, so that upstream processing such as
 Turbo DTO building may be coded based on the common interfaces without needing to adapt every time a new type of target
@@ -22,7 +22,13 @@ For example, Node '1.2.3.4' has memory usage of 3GB is represented in this libra
 * MetricPropertyType: Used
 * MetricValue: 3GB
 
-This library defines a set of interfaces to manage/access the metric repository, including get/set metric values.
+This library defines a set of interfaces to manage/access the metric repository, including get/set metric values.  For
+the detailed definitions, please see [`repository.go`](pkg/repository/repository.go) and
+[`repository_entity.go`](pkg/repository/repository_entity.go).
+
+This library also provides a simple implementation of the defined repository interfaces.  Please see
+[`simple_repo.go`](pkg/repository/simpleRepo/simple_repo.go) and
+[`simple_repo_entity.go`](pkg/repository/simpleRepo/simple_repo_entity.go).
 
 ## Monitoring Template
 
@@ -31,9 +37,12 @@ entity type, resource type, metric property type, and a metric setter that defin
 repository.  This library provides a default metric setter that simply puts the value into the repository, though
 other use cases may exist to have a custom setter.
 
+Please see [`monitoring_template.go`](pkg/template/monitoring_template.go) for its definition as well as the metric
+setter interface.
+
 ## Prometheus Monitoring Client
 
-This library also provides a monitoring client implementation for [Prometheus](https://prometheus.io/).  The
+This library includes a monitoring client implementation for [Prometheus](https://prometheus.io/).  The
 [Prometheus monitoring client](pkg/prometheus) is equipped with a
 [`MetricQueryMap`](pkg/prometheus/prometheus_queries.go) that defines what query to use for a defined metric and how
 the entity id is obtained from the query result.  Currently, the following metric queries are supported:
